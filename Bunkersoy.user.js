@@ -1,4 +1,4 @@
-// ==UserScript==Bunkersoy
+// ==UserScript==
 // @name         Bunkersoy
 // @namespace    http://4chan.org
 // @version      1.1
@@ -142,33 +142,51 @@ user-select: none;`;
     const memeficate = (array, seetheMode) => {
         let firstTextNode = true;
         return array.map(e => {
-            if(typeof(e) === "string") {
+            if(e.startsWith(">") || e.startsWith("http://") || e.startsWith("https://")) {
+                return ">" + e;
+            } else if(e.startsWith("<")) {
+                return "<" + e;
+            } else {
                 const ret = ">" + (firstTextNode && seetheMode ? "NOOOOO!! " : "") + e;
                 if(firstTextNode) {
                     firstTextNode = false;
                 }
                 return seetheMode ? ret.toUpperCase() + "!!" : ret;
-            } else if(e.className === "greenText" || e.tagName === "A") {
-                return ">" + e.innerText;
-            } else if(e.className === "orangeText") {
-                return "<" + e.innerText;
             }
         });
     }
 
-    const textExtractor = (n) => {
-        if(n.data !== undefined) return n.data.split("\n").filter(x => x); //Filter to remove empty entries.
-        if(n.tagName === "SPAN") return n.className === "greenText" || n.className === "orangeText" ? n : n.innerText;
-        if(n.tagName === "A") return n;
+    const textExtractor = (elements) => {
+        const ret = [];
+        for(const e of elements) {
+            if(ret.length === 0) {
+                ret.push(e.data || e.innerText);
+                continue;
+            }
+
+            if(e.tagName === "EM") {
+                ret[ret.length - 1] += e.innerText;
+            } else if(e.tagName === "A") {
+                ret.push(e.innerText);
+            } else if(e.tagName === "SPAN") {
+                if(e.className === "greenText" || e.className === "orangeText") {
+                    ret.push(e.innerText);
+                } else {
+                    ret[ret.length - 1] += e.innerText;
+                }
+            } else if(e.data !== undefined) {
+                ret[ret.length - 1] += e.data;
+            }
+        }
+
+        //Identity filter to remove empty entries.
+        return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
     };
 
     const postText = (id) => {
         const seetheMode = document.getElementById("SeetheButton").checked;
-        return memeficate([...document.getElementById(id).querySelector(".divMessage").childNodes]
-                          .filter(n => !(n.className || "").split(" ").includes("quoteLink"))
-                          .map(textExtractor)
-                          .flat()
-                          .filter(n => n !== undefined), seetheMode);
+        return memeficate(textExtractor([...document.getElementById(id).querySelector(".divMessage").childNodes]
+                                        .filter(n => !(n.className || "").split(" ").includes("quoteLink"))), seetheMode);
     };
 
     const addWojakifyButtons = () => {
