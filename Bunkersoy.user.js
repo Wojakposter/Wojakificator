@@ -37,6 +37,7 @@
     const bgColor = '#ffffff';
     //const bgColor = '#eef2ff';
     const fontSize = 48;
+    const fontName = 'arial';
     const cutOffWord = (context, word, maxWidth) => {
         if(context.measureText(word).width > maxWidth) {
             let ret = "";
@@ -95,36 +96,38 @@
         image.src = options[soyType];
 
         const canvas = document.createElement('canvas');
+        return new Promise((resolve) => {
+            image.onload = function() {
+                canvas.width = this.width;
+                canvas.height = this.height + 100;
+                const ctx = canvas.getContext('2d');
+                const font = fontSize + 'px ' + fontName;
 
-        image.onload = function() {
-            canvas.width = this.width;
-            canvas.height = this.height + 100;
-            const ctx = canvas.getContext('2d');
-            const font = fontSize + 'px arial';
+                ctx.font = font;
+                const lines = wrapText(ctx, postText, this.width);
+                canvas.height += lines.length * fontSize;
 
-            ctx.font = font;
-            const lines = wrapText(ctx, postText, this.width);
-            canvas.height = canvas.height + lines.length * fontSize;
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.font = font;
+                writeToCanvas(ctx, lines, 0, this.height + 100, fontSize);
 
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = font;
-            writeToCanvas(ctx, lines, 0, this.height + 100, fontSize);
-
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(this, 0, 0);
-            canvas.toBlob((blob) => {
-                postCommon.addSelectedFile(new File([blob], "(you).png", {type: "image/png"}));
-            });
-        };
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(this, 0, 0);
+                canvas.toBlob((blob) => {
+                    resolve(new File([blob], "(you).png", {type: "image/png"}));
+                });
+            };
+        });
     }
 
-    const addCheckbox = (id, name) => {
+    const addCheckbox = (id, name, initialState) => {
+        initialState = initialState === true;
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.id = id;
         checkbox.name = id;
-        checkbox.checked = false;
+        checkbox.checked = initialState;
         let label = document.createElement("label");
         label.for = id;
         label.innerHTML = name;
@@ -191,8 +194,7 @@ user-select: none;`;
 
     const addWojakifyButtons = () => {
         document.querySelectorAll(".postInfo, .opHead").forEach(postInfo => {
-            if(postInfo.querySelector(".wojakify") === null && !postInfo.parentNode.parentNode.classList.contains("quoteTooltip"))
-            {
+            if(postInfo.querySelector(".wojakify") === null && !postInfo.parentNode.parentNode.classList.contains("quoteTooltip")) {
                 const button = document.createElement('button');
                 button.style = 'cursor: pointer; margin: 5px';
                 button.textContent = 'Wojakify';
@@ -200,7 +202,15 @@ user-select: none;`;
                 //button.href = "#";
                 button.onclick = (e) => {
                     e.preventDefault();
-                    generateWojak(postText(postInfo.querySelector(".linkQuote").innerText));
+                    const id = postInfo.querySelector(".linkQuote").innerText;
+                    generateWojak(postText(id))
+                        .then((generatedWojak) => {
+                            postCommon.addSelectedFile(generatedWojak);
+                            if(document.getElementById("AutoReply").checked) {
+                                document.getElementById("fieldMessage").value = ">>" + id;
+                                thread.postReply();
+                            }
+                        });
                 };
                 postInfo.insertBefore(button, postInfo.childNodes[0]);
             }
@@ -220,7 +230,7 @@ user-select: none;`;
     }
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
-    [selector, ...addCheckbox("SeetheButton", "Seethe Mode")].forEach(e => header.insertBefore(e, navOptions));
+    [selector, ...addCheckbox("SeetheButton", "Seethe Mode"), ...addCheckbox("AutoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
 
     addWojakifyButtons();
     setInterval(addWojakifyButtons, 5000);
