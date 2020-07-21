@@ -252,18 +252,19 @@ user-select: none;`;
             setCookie(this.id + "Value", this.value);
         }
 
+        const previousSelection = getCookie(id + "Value");
+        if(previousSelection !== undefined) {
+            if(opts[previousSelection] === undefined) {
+                deleteCookie(id + "Value");
+            } else {
+                selector.value = previousSelection;
+            }
+        }
+
         return selector;
     }
 
     let wojakSelector = createSelect("soyjakSelector", options);
-    const previousSelection = getCookie(wojakSelector.id + "Value");
-    if(previousSelection !== undefined) {
-        if(options[previousSelection] === undefined) {
-            deleteCookie(wojakSelector.id + "Value");
-        } else {
-            wojakSelector.value = previousSelection;
-        }
-    }
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
     [wojakSelector, ...createCheckbox("seetheButton", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
