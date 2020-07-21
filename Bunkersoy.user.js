@@ -93,7 +93,7 @@
 
     const generateWojak = (postText) => {
         const image = new Image();
-        const soyType = document.getElementById("SoyjakSelector").value;
+        const soyType = document.getElementById("soyjakSelector").value;
         image.src = options[soyType];
 
         const canvas = document.createElement('canvas');
@@ -167,7 +167,7 @@
     };
 
     const postText = (id) => {
-        const seetheMode = document.getElementById("SeetheButton").checked;
+        const seetheMode = document.getElementById("seetheButton").checked;
         return memeficate(textExtractor([...document.getElementById(id).querySelector(".divMessage").childNodes]
                                         .filter(n => !(n.className || "").split(" ").includes("quoteLink"))), seetheMode);
     };
@@ -185,7 +185,7 @@
                     const id = postInfo.querySelector(".linkQuote").innerText;
                     generateWojak(postText(id)).then((generatedWojak) => {
                         postCommon.addSelectedFile(generatedWojak);
-                        if(document.getElementById("AutoReply").checked) {
+                        if(document.getElementById("autoReply").checked) {
                             document.getElementById("fieldMessage").value = ">>" + id;
                             thread.postReply();
                         }
@@ -255,7 +255,7 @@ user-select: none;`;
         return selector;
     }
 
-    let wojakSelector = createSelect("SoyjakSelector", options);
+    let wojakSelector = createSelect("soyjakSelector", options);
     const previousSelection = getCookie(wojakSelector.id + "Value");
     if(previousSelection !== undefined) {
         if(options[previousSelection] === undefined) {
@@ -266,7 +266,7 @@ user-select: none;`;
     }
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
-    [wojakSelector, ...addCheckbox("SeetheButton", "Seethe Mode"), ...addCheckbox("AutoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
+    [wojakSelector, ...addCheckbox("seetheButton", "Seethe Mode"), ...addCheckbox("autoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
 
     addWojakifyButtons();
     setInterval(addWojakifyButtons, 5000);
