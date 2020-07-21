@@ -209,7 +209,7 @@
         document.cookie = `${name}= ; expires=Thu, 01 Jan 1970 00:00:00 GMT`
     }
 
-    const addCheckbox = (id, name, initialState) => {
+    const createCheckbox = (id, name, initialState) => {
         initialState = initialState === true;
         const isCheckedCookie = getCookie(id + "Enabled");
         if(isCheckedCookie !== undefined)
@@ -266,7 +266,7 @@ user-select: none;`;
     }
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
-    [wojakSelector, ...addCheckbox("seetheButton", "Seethe Mode"), ...addCheckbox("autoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
+    [wojakSelector, ...createCheckbox("seetheButton", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
 
     addWojakifyButtons();
     setInterval(addWojakifyButtons, 5000);
