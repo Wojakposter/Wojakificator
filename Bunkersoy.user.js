@@ -122,46 +122,6 @@
         });
     }
 
-    const getCookie = (name) => {
-        return (document.cookie.split("; ").find(cookie => cookie.startsWith(name)) || "").split("=")[1];
-    }
-
-    const setCookie = (name, value) => {
-        //5184000 = 60*60*24*60
-        document.cookie = `${name}=${value}; max-age=5184000; samesite=strict`;
-    }
-
-    const deleteCookie = (name) => {
-        document.cookie = `${name}= ; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-    }
-
-    const addCheckbox = (id, name, initialState) => {
-        initialState = initialState === true;
-        const isCheckedCookie = getCookie(id + "Enabled");
-        if(isCheckedCookie !== undefined)
-            initialState = isCheckedCookie === "true";
-        let checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = id;
-        checkbox.name = id;
-        checkbox.checked = initialState;
-        checkbox.onclick = function() {
-            setCookie(this.id + "Enabled", this.checked);
-        };
-        let label = document.createElement("label");
-        label.for = id;
-        label.innerHTML = name;
-        label.onclick = () => document.getElementById(id).click();
-        //Make label unselectable;
-        label.style = `-webkit-touch-callout: none;
--webkit-user-select: none;
--khtml-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;`;
-        return [label, checkbox];
-    }
-
     const memeficate = (array, seetheMode) => {
         let firstTextNode = true;
         return array.map(e => {
@@ -235,6 +195,46 @@ user-select: none;`;
             }
         });
     };
+
+    const getCookie = (name) => {
+        return (document.cookie.split("; ").find(cookie => cookie.startsWith(name)) || "").split("=")[1];
+    }
+
+    const setCookie = (name, value) => {
+        //5184000 = 60*60*24*60
+        document.cookie = `${name}=${value}; max-age=5184000; samesite=strict`;
+    }
+
+    const deleteCookie = (name) => {
+        document.cookie = `${name}= ; expires=Thu, 01 Jan 1970 00:00:00 GMT`
+    }
+
+    const addCheckbox = (id, name, initialState) => {
+        initialState = initialState === true;
+        const isCheckedCookie = getCookie(id + "Enabled");
+        if(isCheckedCookie !== undefined)
+            initialState = isCheckedCookie === "true";
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = id;
+        checkbox.name = id;
+        checkbox.checked = initialState;
+        checkbox.onclick = function() {
+            setCookie(this.id + "Enabled", this.checked);
+        };
+        let label = document.createElement("label");
+        label.for = id;
+        label.innerHTML = name;
+        label.onclick = () => document.getElementById(id).click();
+        //Make label unselectable;
+        label.style = `-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;`;
+        return [label, checkbox];
+    }
 
     const createSelect = (id, opts) => {
         let selector = document.createElement("select");
