@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bunkersoy
 // @namespace    http://4chan.org
-// @version      1.2
+// @version      1.3
 // @description  Paste a post into a crying soyjak image
 // @author       (You)
 // @include      https://bunkerchan.xyz/*/res/*
