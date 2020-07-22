@@ -206,7 +206,7 @@
 
     const setCookie = (name, value) => {
         //5184000 = 60*60*24*60
-        document.cookie = `${name}=${value}; max-age=5184000; samesite=strict`;
+        document.cookie = `${name}=${value}; max-age=5184000; samesite=strict; path=/`;
     }
 
     const deleteCookie = (name) => {
