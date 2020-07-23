@@ -145,7 +145,7 @@
         });
     }
 
-    const textExtractor = (elements) => {
+    const extractText = (elements) => {
         const ret = [];
         for(const e of elements) {
             if(ret.length === 0) {
@@ -174,7 +174,7 @@
 
     const postText = (id) => {
         const seetheMode = document.getElementById("seetheButton").checked;
-        return memeficate(textExtractor([...document.getElementById(id).querySelector(".divMessage").childNodes]
+        return memeficate(extractText([...document.getElementById(id).querySelector(".divMessage").childNodes]
                                         .filter(n => !(n.className || "").split(" ").includes("quoteLink"))), seetheMode);
     };
 
