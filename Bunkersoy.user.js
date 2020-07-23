@@ -189,6 +189,7 @@
                     const id = postInfo.querySelector(".linkQuote").innerText;
                     generateWojak(postText(id)).then((generatedWojak) => {
                         postCommon.addSelectedFile(generatedWojak);
+                        qr.showQr(id);
                         if(document.getElementById("autoReply").checked) {
                             document.getElementById("fieldMessage").value = ">>" + id;
                             thread.postReply();
