@@ -271,7 +271,7 @@ user-select: none;`;
     let wojakSelector = createSelect("soyjakSelector", options);
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
-    [wojakSelector, ...createCheckbox("seetheButton", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => header.insertBefore(e, navOptions));
+    [wojakSelector, ...createCheckbox("seetheButton", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply")].forEach(e => header.insertBefore(e, navOptions));
 
     addWojakifyButtons();
     setInterval(addWojakifyButtons, 5000);
