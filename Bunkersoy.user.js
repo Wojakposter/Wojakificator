@@ -173,7 +173,7 @@
     };
 
     const postText = (id) => {
-        const seetheMode = document.getElementById("seetheButton").checked;
+        const seetheMode = document.getElementById("seetheMode").checked;
         return memeficate(extractText([...document.getElementById(id).querySelector(".divMessage").childNodes]
                                         .filter(n => !(n.className || "").split(" ").includes("quoteLink"))), seetheMode);
     };
@@ -274,7 +274,7 @@ user-select: none;`;
     let wojakSelector = createSelect("soyjakSelector", options);
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
-    [wojakSelector, ...createCheckbox("seetheButton", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply")].forEach(e => header.insertBefore(e, navOptions));
+    [wojakSelector, ...createCheckbox("seetheMode", "Seethe Mode"), ...createCheckbox("autoReply", "Auto Reply")].forEach(e => header.insertBefore(e, navOptions));
 
     addWojakifyButtons();
     setInterval(addWojakifyButtons, 5000);
