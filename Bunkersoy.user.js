@@ -203,22 +203,9 @@
         });
     };
 
-    const getCookie = (name) => {
-        return (document.cookie.split("; ").find(cookie => cookie.startsWith(name)) || "").split("=")[1];
-    }
-
-    const setCookie = (name, value) => {
-        //5184000 = 60*60*24*60
-        document.cookie = `${name}=${value}; max-age=5184000; samesite=strict; path=/`;
-    }
-
-    const deleteCookie = (name) => {
-        document.cookie = `${name}= ; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-    }
-
     const createCheckbox = (id, name, initialState) => {
         initialState = initialState === true;
-        const isCheckedCookie = getCookie(id + "Enabled");
+        const isCheckedCookie = localStorage.getItem(id + "Enabled");
         if(isCheckedCookie !== undefined)
             initialState = isCheckedCookie === "true";
         let checkbox = document.createElement("input");
@@ -227,7 +214,7 @@
         checkbox.name = id;
         checkbox.checked = initialState;
         checkbox.onclick = function() {
-            setCookie(this.id + "Enabled", this.checked);
+            localStorage.setItem(this.id + "Enabled", this.checked);
         };
         let label = document.createElement("label");
         label.for = id;
@@ -256,13 +243,13 @@ user-select: none;`;
             selector.appendChild(option);
         }
         selector.oninput = function() {
-            setCookie(this.id + "Value", this.value);
+            localStorage.setItem(this.id + "Value", this.value);
         }
 
-        const previousSelection = getCookie(id + "Value");
+        const previousSelection = localStorage.getItem(id + "Value");
         if(previousSelection !== undefined) {
             if(opts[previousSelection] === undefined) {
-                deleteCookie(id + "Value");
+                localStorage.removeItem(id + "Value");
             } else {
                 selector.value = previousSelection;
             }
@@ -270,10 +257,6 @@ user-select: none;`;
 
         return selector;
     }
-
-    //If there are any legacy cookies present, remove them.
-    const legacyCookies = ["seetheButtonEnabled"];
-    legacyCookies.forEach(deleteCookie);
 
     let wojakSelector = createSelect("soyjakSelector", options);
     const header = document.getElementById("threadHeader");
