@@ -271,6 +271,10 @@ user-select: none;`;
         return selector;
     }
 
+    //If there are any legacy cookies present, remove them.
+    const legacyCookies = ["seetheButtonEnabled"];
+    legacyCookies.forEach(deleteCookie);
+
     let wojakSelector = createSelect("soyjakSelector", options);
     const header = document.getElementById("threadHeader");
     const navOptions = document.getElementById("navOptionsSpan");
