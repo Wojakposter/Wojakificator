@@ -208,7 +208,9 @@
         const isCheckedCookie = localStorage.getItem(id + "Enabled");
         if(isCheckedCookie !== undefined)
             initialState = isCheckedCookie === "true";
+        let label = document.createElement("label");
         let checkbox = document.createElement("input");
+        
         checkbox.type = "checkbox";
         checkbox.id = id;
         checkbox.name = id;
@@ -216,7 +218,7 @@
         checkbox.onclick = function() {
             localStorage.setItem(this.id + "Enabled", this.checked);
         };
-        let label = document.createElement("label");
+        
         label.for = id;
         label.innerHTML = name;
         label.onclick = () => document.getElementById(id).click();
