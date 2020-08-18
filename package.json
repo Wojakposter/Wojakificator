@@ -1,0 +1,27 @@
+{
+  "name": "bunkersoy",
+  "version": "1.7.0",
+  "description": "Bunkerchan wojak generator",
+  "main": "Bunkersoy.user.js",
+  "scripts": {
+    "build": "babel Bunkersoy.user.js -d build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wojakposter/Bunkersoy.git"
+  },
+  "author": "Wojakposter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Wojakposter/Bunkersoy/issues"
+  },
+  "homepage": "https://github.com/Wojakposter/Bunkersoy#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "babel-plugin-macros": "^2.8.0",
+    "data-uri.macro": "^1.0.0"
+  },
+  "dependencies": {}
+}

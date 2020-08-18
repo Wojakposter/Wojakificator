@@ -1,0 +1,5 @@
+{
+    "compact": false,
+    "presets": [],
+    "plugins": ["macros"]
+}
