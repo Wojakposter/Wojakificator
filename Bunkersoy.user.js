@@ -109,7 +109,7 @@ import dataUri from 'data-uri.macro'
     const generateWojak = (postText) => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement('canvas');
-        return loadImage(options[soyType]).then((img) => {
+        return loadAsImage(options[soyType]).then((img) => {
             canvas.width = img.width;
             canvas.height = img.height + 100;
             const ctx = canvas.getContext('2d');
@@ -193,7 +193,7 @@ import dataUri from 'data-uri.macro'
     const generateImageWojak = (postImageURL) => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement("canvas");
-        return Promise.all([options[soyType], speechBubbleDataURL, postImageURL].map(loadImage)).then((args) => {
+        return Promise.all([options[soyType], speechBubbleDataURL, postImageURL].map(loadAsImage)).then((args) => {
             const wojak = args[0];
             const speechBubble = args[1];
             const postImage = args[2];
@@ -217,7 +217,31 @@ import dataUri from 'data-uri.macro'
         }).catch((reason) => alert("Something's fucked: " + reason));
     }
 
-    const loadImage = (dataURL) => {
+    const getFirstVideoFrame = (videoURL) => {
+        const video = document.createElement("video");
+        const canvas = document.createElement("canvas");
+        video.muted = true;
+        video.autoplay = true;
+        video.src = videoURL;
+        return new Promise((resolve, reject) => {
+            video.onloadeddata = function() {
+                canvas.height = this.videoHeight;
+                canvas.width = this.videoWidth;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(this, 0, 0);
+                
+                this.remove();
+                resolve(loadAsImage(canvas.toDataURL()));
+            }
+            video.onerror = () => reject("Error while loading " + videoURL);
+        });
+    }
+
+    const loadAsImage = (dataURL) => {
+        if(dataURL.endsWith(".webm") || dataURL.endsWith(".mp4")) {
+            return getFirstVideoFrame(dataURL);
+        }
         const image = new Image();
         image.src = dataURL;
         return new Promise((resolve, reject) => {
