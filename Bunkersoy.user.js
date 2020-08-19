@@ -23,6 +23,7 @@ import dataUri from 'data-uri.macro'
         "Soyjack7": dataUri("./img/soyjack7.png"),
         "Soyjack8": dataUri("./img/soyjack8.png"),
         "Soyjack9": dataUri("./img/soyjack9.jpeg"),
+        "Soyjack10": dataUri("./img/soyjack10.png"),
         "ChadWojak": dataUri("./img/chadwojak.png"),
         "Gigachad": dataUri("./img/gigachad.jpeg"),
         "Gigachad2": dataUri("./img/gigachad2.jpeg"),
