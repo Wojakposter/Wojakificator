@@ -98,7 +98,7 @@ import dataUri from 'data-uri.macro'
     }
 
     const writeToCanvas = (context, lines, x, y, textHeight) => {
-        for (const line of lines) {
+        for(const line of lines) {
             if(line.startsWith(">")) {
                 context.fillStyle = quoteGreenColor;
             } else if(line.startsWith("<")) {
@@ -109,7 +109,7 @@ import dataUri from 'data-uri.macro'
         }
     }
 
-    const generateWojak = (postText) => {
+    const generateTextWojak = postText => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement('canvas');
         return loadAsImage(options[soyType]).then((img) => {
@@ -152,7 +152,7 @@ import dataUri from 'data-uri.macro'
         });
     }
 
-    const extractText = (elements) => {
+    const extractText = elements => {
         const ret = [];
         for(const e of elements) {
             if(ret.length === 0) {
@@ -179,7 +179,7 @@ import dataUri from 'data-uri.macro'
         return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
     };
 
-    const postText = (id) => {
+    const getPostText = id => {
         const seetheMode = document.getElementById("seetheMode").checked;
         return memeficate(extractText([...document.getElementById(id).querySelector(".divMessage").childNodes]
                                         .filter(n => !(n.className || "").split(" ").includes("quoteLink"))), seetheMode);
@@ -189,11 +189,11 @@ import dataUri from 'data-uri.macro'
         return Math.floor((wholeSize - partSize) / 2);
     }
 
-    const postImage = (id, nth) => {
+    const getPostImageURL = (id, nth) => {
         return document.getElementById(id).querySelectorAll(".nameLink")[nth].href;
     }
 
-    const generateImageWojak = (postImageURL) => {
+    const generateImageWojak = postImageURL => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement("canvas");
         return Promise.all([options[soyType], speechBubbleDataURL, postImageURL].map(loadAsImage)).then((args) => {
@@ -220,7 +220,7 @@ import dataUri from 'data-uri.macro'
         }).catch((reason) => alert("Something's fucked: " + reason));
     }
 
-    const getFirstVideoFrame = (videoURL) => {
+    const getFirstVideoFrame = videoURL => {
         const video = document.createElement("video");
         const canvas = document.createElement("canvas");
         video.muted = true;
@@ -241,24 +241,22 @@ import dataUri from 'data-uri.macro'
         });
     }
 
-    const loadAsImage = (dataURL) => {
-        if(dataURL.endsWith(".webm") || dataURL.endsWith(".mp4")) {
-            return getFirstVideoFrame(dataURL);
+    const loadAsImage = uri => {
+        if(uri.endsWith(".webm") || uri.endsWith(".mp4")) {
+            return getFirstVideoFrame(uri);
         }
         const image = new Image();
-        image.src = dataURL;
+        image.src = uri;
         return new Promise((resolve, reject) => {
             image.onload = function() {
                 resolve(this);
             }
-            image.onerror = () => reject("Error while loading " + dataURL);
+            image.onerror = () => reject("Error while loading " + uri);
         });
     }
 
-    const canvasToFile = (canvas) => {
-        return new Promise(resolve => {
-            canvas.toBlob(blob => resolve(new File([blob], "(you).png", {type: "image/png"})));
-        })
+    const canvasToFile = canvas => {
+        return new Promise(resolve => canvas.toBlob(blob => resolve(new File([blob], "(you).png", {type: "image/png"}))));
     }
 
     const addGeneratedImage = (generatedWojak, id) => {
@@ -274,10 +272,10 @@ import dataUri from 'data-uri.macro'
         document.querySelectorAll(".postInfo, .opHead").forEach(postInfo => {
             if(postInfo.querySelector(".wojakify") === null && postInfo.closest(".quoteTooltip") === null) {
                 const id = postInfo.querySelector(".linkQuote").innerText;
-                const button = createWojakifyButton("wojakify", "Wojakify", () => generateWojak(postText(id)).then((wojak) => addGeneratedImage(wojak, id)));
+                const button = createWojakifyButton("wojakify", "Wojakify", () => generateTextWojak(getPostText(id)).then((wojak) => addGeneratedImage(wojak, id)));
                 postInfo.insertBefore(button, postInfo.childNodes[0]);
                 (postInfo.classList.contains("opHead") ? postInfo.previousElementSibling : postInfo.nextElementSibling.nextElementSibling).querySelectorAll(".uploadDetails").forEach((uploadInfo, i) => {
-                    const imageButton = createWojakifyButton("wojakify-image", "Wojakify Image", () => generateImageWojak(postImage(id, i)).then((wojak) => addGeneratedImage(wojak, id)));
+                    const imageButton = createWojakifyButton("wojakify-image", "Wojakify Image", () => generateImageWojak(getPostImageURL(id, i)).then((wojak) => addGeneratedImage(wojak, id)));
                     uploadInfo.insertBefore(imageButton, uploadInfo.childNodes[0]);
                 });
             }
