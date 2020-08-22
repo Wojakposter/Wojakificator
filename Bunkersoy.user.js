@@ -29,6 +29,7 @@ import dataUri from 'data-uri.macro'
         "Gigachad2": dataUri("./img/gigachad2.jpeg"),
         "PointingFingers": dataUri("./img/pointingfingers.png"),
         "Pink": dataUri("./img/pink.png"),
+        "Grace": dataUri("./img/grace.png"),
         "Doomer": dataUri("./img/doomer.jpeg"),
         "PorkyCrying": dataUri("./img/porkycrying.png"),
         "PorkySoy": dataUri("./img/porkysoy.png"),
