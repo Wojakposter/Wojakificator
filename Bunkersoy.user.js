@@ -52,6 +52,7 @@ import dataUri from 'data-uri.macro'
         "SoyNPC": dataUri("./img/soynpc.png"),
         "Hitler": dataUri("./img/hitler.jpeg"),
         "Nazi": dataUri("./img/nazi.png"),
+        "Nazi2": dataUri("./img/nazi2.png"),
         "Jew": dataUri("./img/jew.jpeg"),
         "Brainlet": dataUri("./img/brainlet.jpeg"),
         "Brainlet2": dataUri("./img/brainlet2.jpeg")
