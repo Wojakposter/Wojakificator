@@ -51,6 +51,7 @@ import dataUri from 'data-uri.macro'
         "NPCBrainlet": dataUri("./img/npcbrainlet.jpeg"),
         "SoyNPC": dataUri("./img/soynpc.png"),
         "Hitler": dataUri("./img/hitler.jpeg"),
+        "Nazi": dataUri("./img/nazi.png"),
         "Jew": dataUri("./img/jew.jpeg"),
         "Brainlet": dataUri("./img/brainlet.jpeg"),
         "Brainlet2": dataUri("./img/brainlet2.jpeg")
@@ -113,7 +114,7 @@ import dataUri from 'data-uri.macro'
     const generateTextWojak = postText => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement('canvas');
-        return loadAsImage(options[soyType]).then((img) => {
+        return loadAsImage(options[soyType]).then(img => {
             canvas.width = img.width;
             canvas.height = img.height + 100;
             const ctx = canvas.getContext('2d');
@@ -197,7 +198,7 @@ import dataUri from 'data-uri.macro'
     const generateImageWojak = postImageURL => {
         const soyType = document.getElementById("soyjakSelector").value;
         const canvas = document.createElement("canvas");
-        return Promise.all([options[soyType], speechBubbleDataURL, postImageURL].map(loadAsImage)).then((args) => {
+        return Promise.all([options[soyType], speechBubbleDataURL, postImageURL].map(loadAsImage)).then(args => {
             const wojak = args[0];
             const speechBubble = args[1];
             const postImage = args[2];
@@ -218,7 +219,7 @@ import dataUri from 'data-uri.macro'
                                      (canvas.height - speechBubble.height) + 50 + centerOffset(scaledHeight, maxScaledImageHeight),
                                      scaledWidth, scaledHeight);
             return canvasToFile(canvas);
-        }).catch((reason) => alert("Something's fucked: " + reason));
+        }).catch(reason => alert("Something's fucked: " + reason));
     }
 
     const getFirstVideoFrame = videoURL => {
@@ -273,10 +274,10 @@ import dataUri from 'data-uri.macro'
         document.querySelectorAll(".postInfo, .opHead").forEach(postInfo => {
             if(postInfo.querySelector(".wojakify") === null && postInfo.closest(".quoteTooltip") === null) {
                 const id = postInfo.querySelector(".linkQuote").innerText;
-                const button = createWojakifyButton("wojakify", "Wojakify", () => generateTextWojak(getPostText(id)).then((wojak) => addGeneratedImage(wojak, id)));
+                const button = createWojakifyButton("wojakify", "Wojakify", () => generateTextWojak(getPostText(id)).then(wojak => addGeneratedImage(wojak, id)));
                 postInfo.insertBefore(button, postInfo.childNodes[0]);
                 (postInfo.classList.contains("opHead") ? postInfo.previousElementSibling : postInfo.nextElementSibling.nextElementSibling).querySelectorAll(".uploadDetails").forEach((uploadInfo, i) => {
-                    const imageButton = createWojakifyButton("wojakify-image", "Wojakify Image", () => generateImageWojak(getPostImageURL(id, i)).then((wojak) => addGeneratedImage(wojak, id)));
+                    const imageButton = createWojakifyButton("wojakify-image", "Wojakify Image", () => generateImageWojak(getPostImageURL(id, i)).then(wojak => addGeneratedImage(wojak, id)));
                     uploadInfo.insertBefore(imageButton, uploadInfo.childNodes[0]);
                 });
             }
