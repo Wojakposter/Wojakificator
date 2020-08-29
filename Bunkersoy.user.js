@@ -45,6 +45,7 @@ import dataUri from 'data-uri.macro'
         "Plebbit": dataUri("./img/plebbit.jpeg"),
         "BasedPepe": dataUri("./img/basedpepe.jpeg"),
         "Pajeet": dataUri("./img/pajeet.png"),
+        "Mutt": dataUri("./img/mutt.png"),
         "Lincuck": dataUri("./img/lincuck.png"),
         "Soymer": dataUri("./img/soymer.png"),
         "Pseud": dataUri("./img/pseud.jpeg"),
