@@ -1,6 +1,6 @@
 import babel from '@rollup/plugin-babel'
 import jscc from 'rollup-plugin-jscc'
-import usersciptHeader from 'rollup-plugin-userscript-header'
+import userscriptHeader from 'rollup-plugin-userscript-header'
 
 const pkg = require('./package.json')
 const platform = process.env.TARGET_PLATFORM || "bunkerchan";
@@ -17,7 +17,7 @@ export default {
         file: `./dist/${PLATFORM_DESCRIPTOR.scriptName}.user.js`,
         format: 'iife'
     },
-    plugins: [jscc({values: PLATFORM_DESCRIPTOR.conditions}), babel({babelHelpers: "bundled"}), usersciptHeader({
+    plugins: [jscc({values: PLATFORM_DESCRIPTOR.conditions}), babel({babelHelpers: "bundled"}), userscriptHeader({
         overwrite: {
             name: PLATFORM_DESCRIPTOR.scriptName,
             namespace: "http://4chan.org",
