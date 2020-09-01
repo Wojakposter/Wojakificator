@@ -1,0 +1,10 @@
+{
+    "conditions": {
+        "_BYPASS_CORS": false,
+        "_ORANGE_QUOTE": true,
+        "_CUSTOM_PREVIEW": false,
+        "_PATCH_REPLY": false
+    },
+    "scriptName": "Bunkersoy",
+    "match": "https://bunkerchan.xyz/*/res/*"
+}
