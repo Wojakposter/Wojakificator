@@ -1,0 +1,10 @@
+{
+    "conditions": {
+        "_BYPASS_CORS": true,
+        "_ORANGE_QUOTE": false,
+        "_CUSTOM_PREVIEW": true,
+        "_PATCH_REPLY": true
+    },
+    "scriptName": "4soy",
+    "include": "https://*.4chan*.org/*/thread/*"
+}
