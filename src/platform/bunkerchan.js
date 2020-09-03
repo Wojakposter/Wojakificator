@@ -52,12 +52,10 @@ const addImageToPost = (generated, id, isAutoReply) => {
     }
 }
 
-const createWojakifyHandler = (wojakify, id, getWojakifyArg) => {
-    return () => {
-        const seetheMode = document.getElementById("seetheMode").checked === true;
-        const autoReply = document.getElementById("autoReply").checked === true;
-        wojakify(getWojakifyArg(seetheMode), options[document.getElementById('soyjakSelector').value]).then(wojak => addImageToPost(wojak, id, autoReply));
-    }
+const createWojakifyHandler = (wojakify, id, getWojakifyArg) => () => {
+    const seetheMode = document.getElementById("seetheMode").checked === true;
+    const autoReply = document.getElementById("autoReply").checked === true;
+    wojakify(getWojakifyArg(seetheMode), options[document.getElementById('soyjakSelector').value]).then(wojak => addImageToPost(wojak, id, autoReply));
 }
 
 const addWojakifyButtons = () => {
