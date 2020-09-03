@@ -56,7 +56,7 @@ const createWojakifyHandler = (wojakify, id, getWojakifyArg) => {
     return () => {
         const seetheMode = document.getElementById("seetheMode").checked === true;
         const autoReply = document.getElementById("autoReply").checked === true;
-        wojakify(getWojakifyArg(seetheMode)).then(wojak => addImageToPost(wojak, id, autoReply));
+        wojakify(getWojakifyArg(seetheMode), options[document.getElementById('soyjakSelector').value]).then(wojak => addImageToPost(wojak, id, autoReply));
     }
 }
 

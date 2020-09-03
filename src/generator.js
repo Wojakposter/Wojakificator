@@ -1,17 +1,15 @@
 import {wrapText} from './textUtil'
 import {writeToCanvas, canvasToFile} from './canvasUtil'
 import {loadAsImage} from './imageUtil'
-import options from './options'
 import * as constants from './constants'
 
 const centerOffset = (partSize, wholeSize) => {
     return Math.floor((wholeSize - partSize) / 2);
 }
 
-export const generateTextWojak = postText => {
-    const soyType = document.getElementById("soyjakSelector").value;
+export const generateTextWojak = (postText, selectedWojakURI) => {
     const canvas = document.createElement('canvas');
-    return loadAsImage(options[soyType]).then(img => {
+    return loadAsImage(selectedWojakURI).then(img => {
         canvas.width = img.width;
         canvas.height = img.height + 100;
         const ctx = canvas.getContext('2d');
@@ -32,10 +30,11 @@ export const generateTextWojak = postText => {
     });
 }
 
-export const generateImageWojak = postImageURL => {
-    const soyType = document.getElementById("soyjakSelector").value;
+export const generateImageWojak = (postImageURL, selectedWojakURI) => {
     const canvas = document.createElement("canvas");
-    return Promise.all([options[soyType], constants.speechBubbleDataURL, postImageURL].map(loadAsImage)).then(args => {
+    if(postImageURL === "none")
+        return Promise.reject("Cannot wojakify-image a post without an image");
+    return Promise.all([selectedWojakURI, constants.speechBubbleDataURL, postImageURL].map(loadAsImage)).then(args => {
         const wojak = args[0];
         const speechBubble = args[1];
         const postImage = args[2];
@@ -56,5 +55,5 @@ export const generateImageWojak = postImageURL => {
                                  (canvas.height - speechBubble.height) + 50 + centerOffset(scaledHeight, constants.maxScaledImageHeight),
                                  scaledWidth, scaledHeight);
         return canvasToFile(canvas);
-    });//.catch(reason => alert("Something's fucked: " + reason));
+    });
 }
