@@ -6,5 +6,5 @@
         "_PATCH_REPLY": false
     },
     "scriptName": "Bunkersoy",
-    "match": "https://bunkerchan.xyz/*/res/*"
+    "include": "https://bunkerchan.xyz/*/res/*"
 }

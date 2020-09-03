@@ -23,7 +23,8 @@ export default {
             namespace: "http://4chan.org",
             version: pkg.version,
             author: pkg.author,
-            match: PLATFORM_DESCRIPTOR.match,
+            include: PLATFORM_DESCRIPTOR.include,
+            match: '',
             grant: grants
         }
     })]
