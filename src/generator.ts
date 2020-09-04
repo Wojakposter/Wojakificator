@@ -3,11 +3,11 @@ import {writeToCanvas, canvasToFile} from './canvasUtil'
 import {loadAsImage} from './imageUtil'
 import * as constants from './constants'
 
-const centerOffset = (partSize, wholeSize) => {
+const centerOffset = (partSize: number, wholeSize: number) => {
     return Math.floor((wholeSize - partSize) / 2);
 }
 
-export const generateTextWojak = (postText, selectedWojakURI) => {
+export const generateTextWojak = (postText: string[], selectedWojakURI: string): Promise<File> => {
     const canvas = document.createElement('canvas');
     return loadAsImage(selectedWojakURI).then(img => {
         canvas.width = img.width;
@@ -30,7 +30,7 @@ export const generateTextWojak = (postText, selectedWojakURI) => {
     });
 }
 
-export const generateImageWojak = (postImageURL, selectedWojakURI) => {
+export const generateImageWojak = (postImageURL: string | 'none', selectedWojakURI: string): Promise<File> => {
     const canvas = document.createElement("canvas");
     if(postImageURL === "none")
         return Promise.reject("Cannot wojakify-image a post without an image");

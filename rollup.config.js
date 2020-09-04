@@ -1,4 +1,5 @@
 import babel from '@rollup/plugin-babel'
+import typescript from '@rollup/plugin-typescript'
 import jscc from 'rollup-plugin-jscc'
 import userscriptHeader from 'rollup-plugin-userscript-header'
 
@@ -17,15 +18,19 @@ export default {
         file: `./dist/${PLATFORM_DESCRIPTOR.scriptName}.user.js`,
         format: 'iife'
     },
-    plugins: [jscc({values: PLATFORM_DESCRIPTOR.conditions}), babel({babelHelpers: "bundled"}), userscriptHeader({
-        overwrite: {
-            name: PLATFORM_DESCRIPTOR.scriptName,
-            namespace: "http://4chan.org",
-            version: pkg.version,
-            author: pkg.author,
-            include: PLATFORM_DESCRIPTOR.include,
-            match: '',
-            grant: grants
-        }
-    })]
+    plugins: [
+        jscc({values: PLATFORM_DESCRIPTOR.conditions}),
+        typescript(),
+        babel({babelHelpers: "bundled", extensions: ['.js', '.ts']}),
+        userscriptHeader({
+            overwrite: {
+                name: PLATFORM_DESCRIPTOR.scriptName,
+                namespace: "http://4chan.org",
+                version: pkg.version,
+                author: pkg.author,
+                include: PLATFORM_DESCRIPTOR.include,
+                match: '',
+                grant: grants
+        }})
+    ]
 }

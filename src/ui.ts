@@ -1,6 +1,7 @@
-export const createWojakifyButton = (buttonClass, name, callback) => {
+export const createWojakifyButton = (buttonClass: string, name: string, callback: () => void) => {
     const button = document.createElement('button');
-    button.style = 'cursor: pointer; margin: 5px';
+    button.style.cursor = 'pointer';
+    button.style.margin = '5px';
     button.textContent = name;
     button.classList.add(buttonClass);
     //button.href = "#";
@@ -11,8 +12,7 @@ export const createWojakifyButton = (buttonClass, name, callback) => {
     return button;
 };
 
-export const createCheckbox = (id, name, initialState) => {
-    initialState = initialState === true;
+export const createCheckbox = (id: string, name: string, initialState: boolean) => {
     const isCheckedCookie = localStorage.getItem(id + "Enabled");
     if(isCheckedCookie !== undefined)
         initialState = isCheckedCookie === "true";
@@ -23,24 +23,19 @@ export const createCheckbox = (id, name, initialState) => {
     checkbox.id = id;
     checkbox.name = id;
     checkbox.checked = initialState;
-    checkbox.onclick = function() {
-        localStorage.setItem(this.id + "Enabled", this.checked);
+    checkbox.onclick = function(this: HTMLInputElement) {
+        localStorage.setItem(this.id + "Enabled", this.checked.toString());
     };
     
-    label.for = id;
+    label.htmlFor = id;
     label.innerHTML = name;
     label.onclick = () => document.getElementById(id).click();
     //Make label unselectable;
-    label.style = `-webkit-touch-callout: none;
--webkit-user-select: none;
--khtml-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;`;
+    label.style.userSelect = 'none';
     return [label, checkbox];
 }
 
-export const createSelect = (id, opts) => {
+export const createSelect = (id: string, opts: object) => {
     let selector = document.createElement("select");
     selector.id = id;
     selector.style.marginLeft = "10px";
@@ -52,7 +47,7 @@ export const createSelect = (id, opts) => {
         option.value = key;
         selector.appendChild(option);
     }
-    selector.oninput = function() {
+    selector.oninput = function(this: HTMLInputElement) {
         localStorage.setItem(this.id + "Value", this.value);
     }
 
@@ -69,10 +64,10 @@ export const createSelect = (id, opts) => {
 }
 
 //#if _CUSTOM_PREVIEW
-export const createPreviewImage = file => {
+export const createPreviewImage = (file: File) => {
     const image = new Image();
     image.src = URL.createObjectURL(file);
-    image.onclick = function() {
+    image.onclick = function(this: HTMLImageElement) {
         URL.revokeObjectURL(this.src);
         this.remove();
     }

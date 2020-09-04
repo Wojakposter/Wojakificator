@@ -1,5 +1,5 @@
 {
     "compact": false,
-    "presets": [],
+    "presets": ["@babel/preset-typescript"],
     "plugins": ["macros"]
 }

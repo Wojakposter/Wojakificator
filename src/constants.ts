@@ -1,4 +1,4 @@
-import dataUri from 'data-uri.macro'
+const dataUri: (path: string) => string = require('data-uri.macro');
 
 export const speechBubbleDataURL = dataUri("../img/speechbubble.png");
 export const quoteGreenColor = '#789922';

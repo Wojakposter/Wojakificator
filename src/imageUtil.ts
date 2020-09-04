@@ -1,5 +1,7 @@
 //#if _BYPASS_CORS
-const fetchAsObjectURL = url => {
+declare function GM_xmlhttpRequest(details: object): void
+
+const fetchAsObjectURL = (url: string): Promise<string> => {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             method: "GET",
@@ -12,15 +14,15 @@ const fetchAsObjectURL = url => {
     });
 }
 
-const bypassCORS = (func, fetchedURL) => {
-    return fetchAsObjectURL(fetchedURL).then(url => Promise.all([func(url), url])).then(args => {
+const bypassCORS = (func: (someUrl: string) => any, fetchedURL: string) => {
+    return fetchAsObjectURL(fetchedURL).then(url => Promise.all([func(url), url])).then((args: [any, string]) => {
         URL.revokeObjectURL(args[1]);
         return args[0];
     });
 }
 //#endif
 
-const getFirstVideoFrame = videoURL => {
+const getFirstVideoFrame = (videoURL: string): Promise<string> => {
     //#if _BYPASS_CORS
     if(videoURL.startsWith("http://") || videoURL.startsWith("https://")) {
         return bypassCORS(getFirstVideoFrame, videoURL);
@@ -32,7 +34,7 @@ const getFirstVideoFrame = videoURL => {
     video.autoplay = true;
     video.src = videoURL;
     return new Promise((resolve, reject) => {
-        video.onloadeddata = function() {
+        video.onloadeddata = function(this: HTMLVideoElement) {
             canvas.height = this.videoHeight;
             canvas.width = this.videoWidth;
 
@@ -46,7 +48,7 @@ const getFirstVideoFrame = videoURL => {
     });
 }
 
-export const loadAsImage = uri => {
+export const loadAsImage = (uri: string): Promise<HTMLImageElement> => {
     if(uri.endsWith(".webm") || uri.endsWith(".mp4")) {
         return getFirstVideoFrame(uri).then(loadAsImage);
     }
@@ -58,7 +60,7 @@ export const loadAsImage = uri => {
     const image = new Image();
     image.src = uri;
     return new Promise((resolve, reject) => {
-        image.onload = function() {
+        image.onload = function(this: HTMLImageElement) {
             resolve(this);
         }
         image.onerror = () => reject("Error while loading " + uri);

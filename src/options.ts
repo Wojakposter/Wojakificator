@@ -1,4 +1,4 @@
-const dataUri = require('data-uri.macro');
+const dataUri: (path: string) => string = require('data-uri.macro');
 
 const options = {
     "Soyjack": dataUri("../img/soyjack.jpeg"),

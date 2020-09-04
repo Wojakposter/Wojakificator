@@ -3,11 +3,11 @@ import {quoteGreenColor} from './constants'
 import {quoteOrangeColor} from './constants'
 //#endif
 
-export const canvasToFile = canvas => {
+export const canvasToFile = (canvas: HTMLCanvasElement): Promise<File> => {
     return new Promise(resolve => canvas.toBlob(blob => resolve(new File([blob], "(you).png", {type: "image/png"}))));
 }
 
-export const writeToCanvas = (context, lines, x, y, textHeight) => {
+export const writeToCanvas = (context: CanvasRenderingContext2D, lines: string[], x: number, y: number, textHeight: number) => {
     //#if _ORANGE_QUOTE === false
     context.fillStyle = quoteGreenColor;
     //#endif

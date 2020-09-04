@@ -1,4 +1,4 @@
-const cutOffWord = (context, word, maxWidth) => {
+const cutOffWord = (context: CanvasRenderingContext2D, word: string, maxWidth: number) => {
     if(context.measureText(word).width > maxWidth) {
         let ret = "";
         for(let c of word) {
@@ -14,7 +14,7 @@ const cutOffWord = (context, word, maxWidth) => {
     return word;
 }
 
-export const wrapText = (context, lines, maxWidth) => {
+export const wrapText = (context: CanvasRenderingContext2D, lines: string[], maxWidth: number): string[] => {
     let ret = [];
     for(const line of lines) {
         if(context.measureText(line).width > maxWidth) {
@@ -33,7 +33,7 @@ export const wrapText = (context, lines, maxWidth) => {
     return ret;
 }
 
-export const memeficate = (array, seetheMode) => {
+export const memeficate = (array: string[], seetheMode: boolean) => {
     let firstTextNode = true;
     return array.map(e => {
         if(e.startsWith(">") || e.startsWith("http://") || e.startsWith("https://")) {
