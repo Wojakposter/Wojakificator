@@ -26,6 +26,7 @@ const options = {
     "Marx": dataUri("../img/marx.jpeg"),
     "Lenin": dataUri("../img/lenin.png"),
     "Trotsky": dataUri("../img/trotsky.png"),
+    "Putin": dataUri("../img/putin.jpeg"),
     "Jannie": dataUri("../img/jannie.png"),
     "Jannie2": dataUri("../img/jannie2.png"),
     "4cuck": dataUri("../img/4cuck.png"),
