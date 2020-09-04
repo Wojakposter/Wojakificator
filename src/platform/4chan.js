@@ -50,7 +50,7 @@ const checkRecaptchaCompletion = () => {
     }
 }
 
-const createWojakifyHandler = (id) => () => {
+const createWojakifyHandler = id => () => {
     const seetheMode = document.getElementById("seetheMode").checked === true;
     const imageMode = document.getElementById("imageMode").checked === true;
     const selectedWojakURI = options[document.getElementById('soyjackSelector').value];
@@ -84,11 +84,11 @@ const addWojakifyButtons = () => {
 }
 
 let wojakSelector = createSelect("soyjackSelector", options);
-    let container = document.querySelector(".bottomCtrl");
-    [wojakSelector, ...createCheckbox("seetheMode", "Seethe Mode"),
-                    ...createCheckbox("imageMode", "Image Mode"),
-                    ...createCheckbox("previewWojak", "Preview", true),
-                    ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => container.appendChild(e));
+let container = document.querySelector(".bottomCtrl");
+[wojakSelector, ...createCheckbox("seetheMode", "Seethe Mode"),
+                ...createCheckbox("imageMode", "Image Mode"),
+                ...createCheckbox("previewWojak", "Preview", true),
+                ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => container.appendChild(e));
 
 addWojakifyButtons();
 setInterval(addWojakifyButtons, 5000);
