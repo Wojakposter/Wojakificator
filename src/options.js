@@ -37,6 +37,7 @@ const options = {
     "Pajeet": dataUri("../img/pajeet.png"),
     "Mutt": dataUri("../img/mutt.png"),
     "Mutt2": dataUri("../img/mutt2.png"),
+    "Mutt3": dataUri("../img/mutt3.png"),
     "Lincuck": dataUri("../img/lincuck.png"),
     "Soymer": dataUri("../img/soymer.png"),
     "Pseud": dataUri("../img/pseud.jpeg"),
