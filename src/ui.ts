@@ -12,7 +12,8 @@ export const createWojakifyButton = (buttonClass: string, name: string, callback
     return button;
 };
 
-export const createCheckbox = (id: string, name: string, initialState: boolean) => {
+export const createCheckbox = (id: string, name: string, initialState?: boolean): [HTMLLabelElement, HTMLInputElement] => {
+    initialState = initialState === true;
     const isCheckedCookie = localStorage.getItem(id + "Enabled");
     if(isCheckedCookie !== undefined)
         initialState = isCheckedCookie === "true";

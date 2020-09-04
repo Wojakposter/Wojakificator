@@ -14,8 +14,8 @@ const fetchAsObjectURL = (url: string): Promise<string> => {
     });
 }
 
-const bypassCORS = (func: (someUrl: string) => any, fetchedURL: string) => {
-    return fetchAsObjectURL(fetchedURL).then(url => Promise.all([func(url), url])).then((args: [any, string]) => {
+const bypassCORS = function<T>(func: (someUrl: string) => Promise<T>, fetchedURL: string) {
+    return fetchAsObjectURL(fetchedURL).then(url => Promise.all([func(url), url])).then((args: [T, string]) => {
         URL.revokeObjectURL(args[1]);
         return args[0];
     });
