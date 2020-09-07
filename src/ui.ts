@@ -12,8 +12,7 @@ export const createWojakifyButton = (buttonClass: string, name: string, callback
     return button;
 };
 
-export const createCheckbox = (id: string, name: string, initialState?: boolean): [HTMLLabelElement, HTMLInputElement] => {
-    initialState = initialState === true;
+export const createCheckbox = (id: string, name: string, initialState = false): [HTMLLabelElement, HTMLInputElement] => {
     const isCheckedCookie = localStorage.getItem(id + "Enabled");
     if(isCheckedCookie !== undefined)
         initialState = isCheckedCookie === "true";
@@ -30,7 +29,6 @@ export const createCheckbox = (id: string, name: string, initialState?: boolean)
     
     label.htmlFor = id;
     label.innerHTML = name;
-    label.onclick = () => document.getElementById(id).click();
     //Make label unselectable;
     label.style.userSelect = 'none';
     return [label, checkbox];
