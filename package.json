@@ -23,6 +23,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@rollup/plugin-babel": "^5.2.0",
     "@rollup/plugin-typescript": "^5.0.2",
+    "@types/jquery": "^3.5.1",
     "@types/node": "^14.6.4",
     "babel-plugin-macros": "^2.8.0",
     "data-uri.macro": "^1.0.0",

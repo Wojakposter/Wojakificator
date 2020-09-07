@@ -1,5 +1,7 @@
 {
     "compact": false,
-    "presets": ["@babel/preset-typescript"],
+    "presets": [["@babel/preset-typescript", {
+        "allowDeclareFields": true
+    }]],
     "plugins": ["macros"]
 }
