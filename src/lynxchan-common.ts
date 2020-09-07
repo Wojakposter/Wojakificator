@@ -87,16 +87,12 @@ export const addImageToPost = (generated, id, isAutoReply) => {
     }
 }
 
-export const getHandleWojakify = (id: string) => (wojak: File) => {
-    addImageToPost(wojak, id, UI.autoReply.checked);
-}
-
 export const createImageWojakifyButton = (id: string, nth: number) => createWojakifyButton('wojakify-image', "Wojakify Image", () => {
-    generateImageWojak(getPostImageURL(id, nth), options[UI.sojakSelector.value]).then(getHandleWojakify(id));
+    generateImageWojak(getPostImageURL(id, nth), options[UI.sojakSelector.value]).then(wojak => addImageToPost(wojak, id, UI.autoReply.checked));
 })
 
 export const createTextWojakifyButton = (id: string) => createWojakifyButton('wojakify', 'Wojakify', () => {
-    generateTextWojak(memeficate(getPostText(id), UI.seetheMode.checked), options[UI.sojakSelector.value]).then(getHandleWojakify(id));
+    generateTextWojak(memeficate(getPostText(id), UI.seetheMode.checked), options[UI.sojakSelector.value]).then(wojak => addImageToPost(wojak, id, UI.autoReply.checked));
 });
 
 export const addWojakifyButtons = () => {
