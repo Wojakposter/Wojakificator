@@ -3,9 +3,7 @@ import {writeToCanvas, canvasToFile} from './canvasUtil'
 import {loadAsImage} from './imageUtil'
 import * as constants from './constants'
 
-const centerOffset = (partSize: number, wholeSize: number) => {
-    return Math.floor((wholeSize - partSize) / 2);
-}
+const centerOffset = (partSize: number, wholeSize: number) => Math.floor((wholeSize - partSize) / 2);
 
 export const generateTextWojak = (postText: string[], selectedWojakURI: string): Promise<File> => {
     const canvas = document.createElement('canvas');
