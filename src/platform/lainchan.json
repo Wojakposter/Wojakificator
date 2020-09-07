@@ -1,0 +1,10 @@
+{
+    "conditions": {
+        "_BYPASS_CORS": false,
+        "_ORANGE_QUOTE": false,
+        "_CUSTOM_PREVIEW": true,
+        "_PATCH_REPLY": false
+    },
+    "scriptName": "Lainsoy",
+    "include": "https://*lainchan.org/*/res/*"
+}
