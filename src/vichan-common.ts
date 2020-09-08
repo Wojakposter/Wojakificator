@@ -2,8 +2,6 @@ import options from './options'
 import { createWojakifyButton, createSelect, createCheckbox, createPreviewImage } from './ui'
 import { generateImageWojak, generateTextWojak} from './generator'
 import { memeficate } from './textUtil';
-import { addWojakifyButtons } from './lynxchan-common';
-import { threadId } from 'worker_threads';
 
 export type TextWojakifyButtonCreator = (id: string) => HTMLButtonElement
 export type ImageWojakifyButtonCreator = (id: string, nth: number) => HTMLButtonElement;
