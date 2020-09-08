@@ -3,10 +3,27 @@ import { generateTextWojak, generateImageWojak } from "./generator";
 import options from './options'
 import { memeficate } from "./textUtil";
 
-interface UserInterfaceContainer {
+export interface UserInterfaceContainer {
     sojakSelector: HTMLSelectElement;
     seetheMode: HTMLInputElement;
     autoReply: HTMLInputElement;
+}
+
+export interface ThreadAccessor {
+    getPostText(id: string): string[];
+    getPostImageURL(id: string, nth: number): string;
+}
+
+declare namespace postCommon {
+    function addSelectedFile(selectedFile: File): void
+}
+
+declare namespace qr {
+    function showQr(id: string): void;
+}
+
+declare namespace thread {
+    function postReply(): void
 }
 
 export const createUI = (): UserInterfaceContainer => {
@@ -28,11 +45,13 @@ export class LynxchanPlatformHandler {
     declare seetheMode: HTMLInputElement;
     declare wojakSelector: HTMLSelectElement;
     declare autoReply: HTMLInputElement;
+    declare accessor: ThreadAccessor;
 
-    constructor(ui: UserInterfaceContainer) {
+    constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
         this.seetheMode = ui.seetheMode;
         this.wojakSelector = ui.sojakSelector;
         this.autoReply = ui.autoReply;
+        this.accessor = accessor;
     }
 
     protected handleWojakify(wojak: File, id: string) {
@@ -46,13 +65,13 @@ export class LynxchanPlatformHandler {
 
     protected createImageWojakifyButton(id: string, nth: number) {
         return createWojakifyButton('wojakify-image', 'Wojakify Image', () => {
-            generateImageWojak(getPostImageURL(id, nth), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
 
     protected createTextWojakifyButton(id: string) {
         return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(getPostText(id), this.seetheMode.checked), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
     
@@ -69,52 +88,41 @@ export class LynxchanPlatformHandler {
     }
 }
 
-declare namespace postCommon {
-    function addSelectedFile(selectedFile: File): void
-}
-
-declare namespace qr {
-    function showQr(id: string): void;
-}
-
-declare namespace thread {
-    function postReply(): void
-}
-
-export const extractText = (elements: any[]) => {
-    const ret: string[] = [];
-    for(const e of elements) {
-        if(ret.length === 0) {
-            ret.push(e.data || e.innerText);
-            continue;
-        }
-
-        if(e.tagName === "EM" || e.tagName === "STRONG" || e.tagName === "S" || e.tagName === "U") {
-            ret[ret.length - 1] += e.innerText;
-        } else if(e.tagName === "A") {
-            ret.push(e.innerText);
-        } else if(e.tagName === "SPAN") {
-            if(e.className === "greenText" || e.className === "orangeText") {
-                ret.push(e.innerText);
-            } else {
-                ret[ret.length - 1] += e.innerText;
+export class LynxchanAccessor implements ThreadAccessor {
+    private extractText(elements: any[]) {
+        const ret: string[] = [];
+        for(const e of elements) {
+            if(ret.length === 0) {
+                ret.push(e.data || e.innerText);
+                continue;
             }
-        } else if(e.data !== undefined) {
-            ret[ret.length - 1] += e.data;
+
+            if((e.classList || []).includes(''))
+    
+            if(e.tagName === "EM" || e.tagName === "STRONG" || e.tagName === "S" || e.tagName === "U") {
+                ret[ret.length - 1] += e.innerText;
+            } else if(e.tagName === "A" && e.className !== 'quoteLink') {
+                ret.push(e.innerText);
+            } else if(e.tagName === "SPAN") {
+                if(e.className === "greenText" || e.className === "orangeText") {
+                    ret.push(e.innerText);
+                } else {
+                    ret[ret.length - 1] += e.innerText;
+                }
+            } else if(e.data !== undefined) {
+                ret[ret.length - 1] += e.data;
+            }
         }
+    
+        //Identity filter to remove empty entries.
+        return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
     }
 
-    //Identity filter to remove empty entries.
-    return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
-};
+    public getPostText(id: string) {
+        return this.extractText([...document.getElementById(id).querySelector(".divMessage").childNodes as any]);
+    }
 
-export const parsePostText = (elements: HTMLElement[]) => {
-    //Filter to remove links to posts
-    return extractText(elements.filter(n => !(n.className || "").split(" ").includes("quoteLink")));
-}
-
-export const getPostText = (id: string) => parsePostText([...document.getElementById(id).querySelector(".divMessage").childNodes as any]);
-
-export const getPostImageURL = (id: string, nth: number) => {
-    return (document.getElementById(id).querySelectorAll(".nameLink")[nth] as HTMLAnchorElement).href;
+    public getPostImageURL(id: string, nth: number) {
+        return (document.getElementById(id).querySelectorAll(".nameLink")[nth] as HTMLAnchorElement).href;
+    }
 }
