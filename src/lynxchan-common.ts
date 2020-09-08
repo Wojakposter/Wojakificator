@@ -88,38 +88,38 @@ export class LynxchanPlatformHandler {
     }
 }
 
-export class LynxchanAccessor implements ThreadAccessor {
-    private extractText(elements: any[]) {
-        const ret: string[] = [];
-        for(const e of elements) {
-            if(ret.length === 0) {
-                ret.push(e.data || e.innerText);
-                continue;
-            }
-
-            if((e.classList || []).includes(''))
-    
-            if(e.tagName === "EM" || e.tagName === "STRONG" || e.tagName === "S" || e.tagName === "U") {
-                ret[ret.length - 1] += e.innerText;
-            } else if(e.tagName === "A" && e.className !== 'quoteLink') {
-                ret.push(e.innerText);
-            } else if(e.tagName === "SPAN") {
-                if(e.className === "greenText" || e.className === "orangeText") {
-                    ret.push(e.innerText);
-                } else {
-                    ret[ret.length - 1] += e.innerText;
-                }
-            } else if(e.data !== undefined) {
-                ret[ret.length - 1] += e.data;
-            }
+const extractText = (elements: any[]) => {
+    const ret: string[] = [];
+    for(const e of elements) {
+        if(ret.length === 0) {
+            ret.push(e.data || e.innerText);
+            continue;
         }
-    
-        //Identity filter to remove empty entries.
-        return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
+
+        if((e.classList || []).includes(''))
+
+        if(e.tagName === "EM" || e.tagName === "STRONG" || e.tagName === "S" || e.tagName === "U") {
+            ret[ret.length - 1] += e.innerText;
+        } else if(e.tagName === "A" && e.className !== 'quoteLink') {
+            ret.push(e.innerText);
+        } else if(e.tagName === "SPAN") {
+            if(e.className === "greenText" || e.className === "orangeText") {
+                ret.push(e.innerText);
+            } else {
+                ret[ret.length - 1] += e.innerText;
+            }
+        } else if(e.data !== undefined) {
+            ret[ret.length - 1] += e.data;
+        }
     }
 
+    //Identity filter to remove empty entries.
+    return ret.flatMap(x => x.split("\n")).map(x => x.trim()).filter(x => x);
+}
+
+export class LynxchanAccessor implements ThreadAccessor {
     public getPostText(id: string) {
-        return this.extractText([...document.getElementById(id).querySelector(".divMessage").childNodes as any]);
+        return extractText([...document.getElementById(id).querySelector(".divMessage").childNodes as any]);
     }
 
     public getPostImageURL(id: string, nth: number) {
