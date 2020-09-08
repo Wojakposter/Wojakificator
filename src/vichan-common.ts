@@ -13,31 +13,42 @@ export interface UserInterfaceContainer {
     autoReply: HTMLInputElement;
 }
 
-export class VichanPlatformHandler {
-    declare UI: UserInterfaceContainer;
+export interface ThreadAccessor {
+    getPostText(id: string): string[];
+    getPostImageURL(id: string, nth: number): string;
+    getPostContainer(id: string): HTMLElement
+}
 
-    constructor(ui: UserInterfaceContainer) {
-        this.UI = ui;
+export class VichanPlatformHandler implements UserInterfaceContainer {
+    declare sojakSelector: HTMLSelectElement;
+    declare seetheMode: HTMLInputElement;
+    declare preview: HTMLInputElement;
+    declare autoReply: HTMLInputElement;
+    declare accessor: ThreadAccessor;
+
+    constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
+        Object.assign(this, ui);
+        this.accessor = accessor;
     }
 
     protected handleWojakify(wojak: File, id: string) {
         VichanPostingPatcher.recentWojak = wojak;
-        if(this.UI.preview.checked)
-            getPostContainer(id).appendChild(createPreviewImage(wojak));
-        if(this.UI.autoReply.checked) {
+        if(this.preview.checked)
+            this.accessor.getPostContainer(id).appendChild(createPreviewImage(wojak));
+        if(this.autoReply.checked) {
             document.getElementsByName('post')[1].click();
         }
     }
 
     protected createImageWojakifyButton(id: string, nth: number) {
         return createWojakifyButton('wojakify-image', 'Wojakify', () => {
-            generateImageWojak(getPostImageURL(id, nth), options[this.UI.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
 
     protected createTextWojakifyButton(id: string) {
         return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(getPostText(id), this.UI.seetheMode.checked), options[this.UI.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
 
@@ -61,35 +72,7 @@ export class VichanPlatformHandler {
     }
 }
 
-export const createUI = (): UserInterfaceContainer => {
-    const wojakSelector = createSelect("soyjakSelector", options);
-    const seethMode = createCheckbox("seetheMode", "Seethe Mode");
-    const autoReply = createCheckbox("autoReply", "Auto Reply");
-    const preview = createCheckbox('preview', 'Preview');
-
-    const header = document.querySelector('.boardlist');
-    [wojakSelector, ...seethMode, ...autoReply, ...preview].forEach(e => header.appendChild(e));
-    return {
-        sojakSelector: wojakSelector,
-        seetheMode: seethMode[1],
-        autoReply: autoReply[1],
-        preview: preview[1]
-    }
-}
-
-export const getPostImageURL = (id: string, nth: number) => {
-    const imgContainer = (document.getElementById('reply_' + id) || document.getElementById('thread_' + id)).children[1].children[nth];
-    if(imgContainer === undefined || imgContainer.children.length < 2)
-        return 'none';
-    const childList = imgContainer.children;
-    return (childList[childList.length - 1] as HTMLAnchorElement).href;
-}
-
-export const getPostContainer = (id: string) => {
-    return (document.getElementById('reply_' + id) || document.getElementById('op_' + id));
-}
-
-export const extractText = (elements: any[]) => {
+const extractText = (elements: any[]) => {
     let ret: string[] = [];
     for(const e of elements) {
         if(e.classList.contains('empty')) {
@@ -107,8 +90,38 @@ export const extractText = (elements: any[]) => {
     return ret;
 }
 
-export const getPostText = id => {
-    return extractText([...getPostContainer(id).querySelector('.body').childNodes as any])
+export class VichanAccessor implements ThreadAccessor {
+    public getPostText(id: string): string[] {
+        return extractText([...this.getPostContainer(id).querySelector('.body').childNodes as any]);
+    }
+
+    public getPostContainer(id: string) {
+        return (document.getElementById('reply_' + id) || document.getElementById('op_' + id));
+    }
+
+    public getPostImageURL(id: string, nth: number): string {
+        const imgContainer = (document.getElementById('reply_' + id) || document.getElementById('thread_' + id)).children[1].children[nth];
+        if(imgContainer === undefined || imgContainer.children.length < 2)
+            return 'none';
+        const childList = imgContainer.children;
+        return (childList[childList.length - 1] as HTMLAnchorElement).href;
+    }
+}
+
+export const createUI = (): UserInterfaceContainer => {
+    const wojakSelector = createSelect("soyjakSelector", options);
+    const seethMode = createCheckbox("seetheMode", "Seethe Mode");
+    const autoReply = createCheckbox("autoReply", "Auto Reply");
+    const preview = createCheckbox('preview', 'Preview');
+
+    const header = document.querySelector('.boardlist');
+    [wojakSelector, ...seethMode, ...autoReply, ...preview].forEach(e => header.appendChild(e));
+    return {
+        sojakSelector: wojakSelector,
+        seetheMode: seethMode[1],
+        autoReply: autoReply[1],
+        preview: preview[1]
+    }
 }
 
 export const VichanPostingPatcher = {

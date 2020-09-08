@@ -1,22 +1,6 @@
-import { createWojakifyButton } from './ui'
-import { memeficate } from './textUtil'
-import { generateTextWojak } from './generator'
-import { getPostContainer, UserInterfaceContainer, VichanPlatformHandler } from './vichan-common'
-import options from './options'
+import { VichanAccessor } from './vichan-common'
 
-export class LainchanPlatformHandler extends VichanPlatformHandler {
-    constructor(ui: UserInterfaceContainer) {
-        super(ui);
-    }
-
-    protected createTextWojakifyButton(id: string) {
-        return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(getPostText(id), this.UI.seetheMode.checked), options[this.UI.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
-        });
-    }
-}
-
-export const extractText = (elements: any[]) => {
+const extractText = (elements: any[]) => {
     const ret: string[] = [];
     let currentLine = ''
     const insertNextLine = text => {
@@ -53,6 +37,8 @@ export const extractText = (elements: any[]) => {
     return ret.map(x => x.trim()).filter(x => x);
 }
 
-export const getPostText = (id: string) => {
-    return extractText([...getPostContainer(id).querySelector('.body').childNodes as any])
+export class LainchanAccessor extends VichanAccessor {
+    public getPostText(id: string) {
+        return extractText([...this.getPostContainer(id).querySelector('.body').childNodes as any]);
+    }
 }
