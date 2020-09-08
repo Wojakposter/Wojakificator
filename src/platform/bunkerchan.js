@@ -1,7 +1,7 @@
 import options from '../options'
 import * as consts from '../constants'
-import { addWojakifyButtons, setUI, createUI} from "../lynxchan-common";
+import { LynxchanPlatformHandler, createUI } from "../lynxchan-common";
 
-setUI(createUI());
-addWojakifyButtons();
-setInterval(addWojakifyButtons, 5000);
+const platformHandler = new LynxchanPlatformHandler(createUI());
+platformHandler.addWojakifyButtons();
+setInterval(() => platformHandler.addWojakifyButtons(), 5000);
