@@ -41,16 +41,14 @@ export const createUI = (): UserInterfaceContainer => {
     }
 }
 
-export class LynxchanPlatformHandler {
+export class LynxchanPlatformHandler implements UserInterfaceContainer {
     declare seetheMode: HTMLInputElement;
-    declare wojakSelector: HTMLSelectElement;
+    declare sojakSelector: HTMLSelectElement;
     declare autoReply: HTMLInputElement;
     declare accessor: ThreadAccessor;
 
     constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
-        this.seetheMode = ui.seetheMode;
-        this.wojakSelector = ui.sojakSelector;
-        this.autoReply = ui.autoReply;
+        Object.assign(this, ui);
         this.accessor = accessor;
     }
 
@@ -65,13 +63,13 @@ export class LynxchanPlatformHandler {
 
     protected createImageWojakifyButton(id: string, nth: number) {
         return createWojakifyButton('wojakify-image', 'Wojakify Image', () => {
-            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
 
     protected createTextWojakifyButton(id: string) {
         return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.wojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
     
