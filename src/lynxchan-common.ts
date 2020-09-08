@@ -87,6 +87,7 @@ export class LynxchanPlatformHandler implements UserInterfaceContainer {
 }
 
 const extractText = (elements: any[]) => {
+    elements = elements.filter(e => !(e.className || "").split(' ').includes('quoteLink'));
     const ret: string[] = [];
     for(const e of elements) {
         if(ret.length === 0) {
@@ -94,11 +95,9 @@ const extractText = (elements: any[]) => {
             continue;
         }
 
-        if((e.classList || []).includes(''))
-
         if(e.tagName === "EM" || e.tagName === "STRONG" || e.tagName === "S" || e.tagName === "U") {
             ret[ret.length - 1] += e.innerText;
-        } else if(e.tagName === "A" && e.className !== 'quoteLink') {
+        } else if(e.tagName === "A") {
             ret.push(e.innerText);
         } else if(e.tagName === "SPAN") {
             if(e.className === "greenText" || e.className === "orangeText") {
