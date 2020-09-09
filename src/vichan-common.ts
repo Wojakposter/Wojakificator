@@ -25,14 +25,16 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
     declare preview: HTMLInputElement;
     declare autoReply: HTMLInputElement;
     declare accessor: ThreadAccessor;
+    declare recentWojak: File;
 
     constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
         Object.assign(this, ui);
         this.accessor = accessor;
+        this.recentWojak = null;
     }
 
     protected handleWojakify(wojak: File, id: string) {
-        VichanPostingPatcher.recentWojak = wojak;
+        this.recentWojak = wojak;
         if(this.preview.checked)
             this.accessor.getPostContainer(id).appendChild(createPreviewImage(wojak));
         if(this.autoReply.checked) {
@@ -67,6 +69,16 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
                         return;
                     fileInfo.insertBefore(this.createImageWojakifyButton(id, i), fileInfo.childNodes[0]);
                 });
+            }
+        });
+    }
+
+    public setupPostingHandler()
+    {
+        $(document).on('ajax_before_post', (e, formData: FormData) => {
+            if(this.recentWojak) {
+                formData.set('file', this.recentWojak);
+                this.recentWojak = null;
             }
         });
     }
@@ -121,17 +133,5 @@ export const createUI = (): UserInterfaceContainer => {
         seetheMode: seethMode[1],
         autoReply: autoReply[1],
         preview: preview[1]
-    }
-}
-
-export const VichanPostingPatcher = {
-    recentWojak: null,
-    setupPostingHandler: () => {
-        $(document).on('ajax_before_post', (e, formData: FormData) => {
-            if(VichanPostingPatcher.recentWojak) {
-                formData.set('file', VichanPostingPatcher.recentWojak);
-                VichanPostingPatcher.recentWojak = null;
-            }
-        })
     }
 }
