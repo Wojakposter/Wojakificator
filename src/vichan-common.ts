@@ -6,6 +6,8 @@ import { memeficate } from './textUtil';
 export type TextWojakifyButtonCreator = (id: string) => HTMLButtonElement
 export type ImageWojakifyButtonCreator = (id: string, nth: number) => HTMLButtonElement;
 
+declare function citeReply(id: string): boolean
+
 export interface UserInterfaceContainer {
     sojakSelector: HTMLSelectElement;
     seetheMode: HTMLInputElement;
@@ -35,6 +37,7 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
 
     protected handleWojakify(wojak: File, id: string) {
         this.recentWojak = wojak;
+        citeReply(id);
         if(this.preview.checked)
             this.accessor.getPostContainer(id).appendChild(createPreviewImage(wojak));
         if(this.autoReply.checked) {
