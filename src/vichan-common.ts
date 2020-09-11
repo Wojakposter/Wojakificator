@@ -76,11 +76,10 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
     public setupPostingHandler()
     {
         $(document).on('ajax_before_post', (e, formData: FormData) => {
-            if(this.recentWojak) {
+            if(this.recentWojak)
                 formData.set('file', this.recentWojak);
-                this.recentWojak = null;
-            }
         });
+        $(document).on('ajax_after_post', () => this.recentWojak = null);
     }
 }
 
