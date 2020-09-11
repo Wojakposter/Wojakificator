@@ -127,7 +127,7 @@ export const createUI = (): UserInterfaceContainer => {
     const wojakSelector = createSelect("soyjakSelector", options);
     const seethMode = createCheckbox("seetheMode", "Seethe Mode");
     const autoReply = createCheckbox("autoReply", "Auto Reply");
-    const preview = createCheckbox('preview', 'Preview');
+    const preview = createCheckbox('preview', 'Preview', true);
 
     const header = document.querySelector('.boardlist');
     [wojakSelector, ...seethMode, ...autoReply, ...preview].forEach(e => header.appendChild(e));
