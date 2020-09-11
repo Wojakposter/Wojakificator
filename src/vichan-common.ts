@@ -43,7 +43,7 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
     }
 
     protected createImageWojakifyButton(id: string, nth: number) {
-        return createWojakifyButton('wojakify-image', 'Wojakify', () => {
+        return createWojakifyButton('wojakify-image', 'Wojakify Image', () => {
             generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
         });
     }
