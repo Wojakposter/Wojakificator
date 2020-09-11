@@ -3,9 +3,6 @@ import { createWojakifyButton, createSelect, createCheckbox, createPreviewImage 
 import { generateImageWojak, generateTextWojak} from './generator'
 import { memeficate } from './textUtil';
 
-export type TextWojakifyButtonCreator = (id: string) => HTMLButtonElement
-export type ImageWojakifyButtonCreator = (id: string, nth: number) => HTMLButtonElement;
-
 declare function citeReply(id: string): boolean
 
 export interface UserInterfaceContainer {
