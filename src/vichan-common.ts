@@ -89,9 +89,10 @@ const extractText = (elements: any[]) => {
         if(e.classList.contains('empty')) {
             continue;
         } else if(e.classList.contains('ltr')) {
-            const containedElement = e.children[0];
-            if(containedElement.tagName === 'A' && !containedElement.innerText.startsWith('>>')) {
-                ret.push(e.innerText);
+            const containedElement = e.childNodes[0];
+            if(containedElement.tagName === 'A') {
+                if(!(containedElement.innerText || "").startsWith('>>'))
+                    ret.push(e.innerText);
             } else {
                 ret.push(e.data || e.innerText);
             }
