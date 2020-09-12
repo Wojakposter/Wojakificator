@@ -1,0 +1,10 @@
+{
+    "conditions": {
+        "_BYPASS_CORS": true,
+        "_ORANGE_QUOTE": false,
+        "_CUSTOM_PREVIEW": true,
+        "_PATCH_REPLY": false
+    },
+    "scriptName": "8soy",
+    "include": "https://8kun.top/*/res/*"
+}
