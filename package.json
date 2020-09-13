@@ -1,6 +1,6 @@
 {
   "name": "bunkersoy",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Bunkerchan wojak generator",
   "main": "Bunkersoy.user.js",
   "scripts": {
