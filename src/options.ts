@@ -34,6 +34,7 @@ const options = {
     "/pol/cel2": dataUri("../img/polcel2.png"),
     "/pol/cel3": dataUri("../img/polcel3.png"),
     "/pol/cel4": dataUri("../img/polcel4.png"),
+    "/pol/cel5": dataUri("../img/polcel5.png"),
     "Plebbit": dataUri("../img/plebbit.jpeg"),
     "BasedPepe": dataUri("../img/basedpepe.jpeg"),
     "Pajeet": dataUri("../img/pajeet.png"),
