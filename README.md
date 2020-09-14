@@ -1,5 +1,5 @@
-# Bunkersoy
-Bunkerchan wojak generator
+# Wojakificator
+Wojak generator that supports multiple chans
 
 # Build instructions
 Requires npm

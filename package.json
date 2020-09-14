@@ -1,22 +1,21 @@
 {
-  "name": "bunkersoy",
+  "name": "wojakificator",
   "version": "1.10.0",
-  "description": "Bunkerchan wojak generator",
-  "main": "Bunkersoy.user.js",
+  "description": "Wojak generator that supports multiple chans",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wojakposter/Bunkersoy.git"
+    "url": "git+https://github.com/Wojakposter/Wojakificator.git"
   },
   "author": "Wojakposter",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Wojakposter/Bunkersoy/issues"
+    "url": "https://github.com/Wojakposter/Wojakificator/issues"
   },
-  "homepage": "https://github.com/Wojakposter/Bunkersoy#readme",
+  "homepage": "https://github.com/Wojakposter/Wojakificator#readme",
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.1",
