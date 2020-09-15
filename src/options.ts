@@ -51,6 +51,7 @@ const options = {
     "Nazi": dataUri("../img/nazi.png"),
     "Nazi2": dataUri("../img/nazi2.png"),
     "Priest": dataUri("../img/priest.jpg"),
+    "Christcuck": dataUri("../img/christcuck.png"),
     "Jew": dataUri("../img/jew.jpeg"),
     "Brainlet": dataUri("../img/brainlet.jpeg"),
     "Brainlet2": dataUri("../img/brainlet2.jpeg")
