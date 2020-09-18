@@ -1,7 +1,7 @@
 {
     "conditions": {
         "_BYPASS_CORS": true,
-        "_ORANGE_QUOTE": false,
+        "_ORANGE_QUOTE": true,
         "_CUSTOM_PREVIEW": true,
         "_PATCH_REPLY": false
     },
