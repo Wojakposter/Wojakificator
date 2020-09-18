@@ -14,7 +14,7 @@ export const createWojakifyButton = (buttonClass: string, name: string, callback
 
 export const createCheckbox = (id: string, name: string, initialState = false): [HTMLLabelElement, HTMLInputElement] => {
     const isCheckedCookie = localStorage.getItem(id + "Enabled");
-    if(isCheckedCookie !== undefined)
+    if(isCheckedCookie !== null)
         initialState = isCheckedCookie === "true";
     let label = document.createElement("label");
     let checkbox = document.createElement("input");
