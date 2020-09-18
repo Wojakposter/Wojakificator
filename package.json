@@ -1,6 +1,6 @@
 {
   "name": "wojakificator",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "Wojak generator that supports multiple chans",
   "scripts": {
     "build": "rollup -c",
