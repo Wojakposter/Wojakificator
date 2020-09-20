@@ -51,7 +51,7 @@ export const createSelect = (id: string, opts: object) => {
     }
 
     const previousSelection = localStorage.getItem(id + "Value");
-    if(previousSelection !== undefined) {
+    if(previousSelection !== null) {
         if(opts[previousSelection] === undefined) {
             localStorage.removeItem(id + "Value");
         } else {
