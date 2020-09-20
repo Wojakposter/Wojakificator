@@ -1,6 +1,6 @@
 import options from '../options'
 import * as constants from '../constants'
-import { VichanAccessor, createUI, VichanPlatformHandler } from '../vichan-common'
+import { createUI, VichanPlatformHandler } from '../vichan-common'
 import { InfinityAccessor } from '../infinity-common'
 
 const platformHandler = new VichanPlatformHandler(createUI(), new InfinityAccessor());
