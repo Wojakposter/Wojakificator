@@ -13,7 +13,7 @@ let grants = [
 grants = grants.length === 0 ? ["none"] : grants
 
 export default {
-    input: `./src/platform/${platform}.js`,
+    input: `./src/platform/${PLATFORM_DESCRIPTOR.software}.js`,
     output: {
         file: `./dist/${PLATFORM_DESCRIPTOR.scriptName}.user.js`,
         format: 'iife'

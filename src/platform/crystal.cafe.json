@@ -6,5 +6,6 @@
         "_PATCH_REPLY": false
     },
     "scriptName": "Soycafe",
+    "software": "tinyboard",
     "include": "https://crystal.cafe/*/res/*"
 }

@@ -6,5 +6,6 @@
         "_PATCH_REPLY": true
     },
     "scriptName": "4soy",
+    "software": "4chan",
     "include": "https://*.4chan*.org/*/thread/*"
 }

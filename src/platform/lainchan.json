@@ -6,5 +6,6 @@
         "_PATCH_REPLY": false
     },
     "scriptName": "Lainsoy",
+    "software": "vichan",
     "include": "https://*lainchan.org/*/res/*"
 }
