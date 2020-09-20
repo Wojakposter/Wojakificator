@@ -1,45 +1,12 @@
 import options from './options'
-import { createWojakifyButton, createSelect, createCheckbox, createPreviewImage } from './ui'
-import { generateImageWojak, generateTextWojak} from './generator'
-import { memeficate } from './textUtil';
+import { createCheckbox, createSelect, createWojakifyButton } from './ui'
+import { TinyboardAccessor, TinyboardPlatformHandler, UserInterfaceContainer } from './tinyboard-common'
+import { generateTextWojak, generateImageWojak } from './generator'
+import { memeficate } from './textUtil'
 
-declare function citeReply(id: string): boolean
-
-export interface UserInterfaceContainer {
-    sojakSelector: HTMLSelectElement;
-    seetheMode: HTMLInputElement;
-    preview: HTMLInputElement;
-    autoReply: HTMLInputElement;
-}
-
-export interface ThreadAccessor {
-    getPostText(id: string): string[];
-    getPostImageURL(id: string, nth: number): string;
-    getPostContainer(id: string): HTMLElement
-}
-
-export class VichanPlatformHandler implements UserInterfaceContainer {
-    declare sojakSelector: HTMLSelectElement;
-    declare seetheMode: HTMLInputElement;
-    declare preview: HTMLInputElement;
-    declare autoReply: HTMLInputElement;
-    declare accessor: ThreadAccessor;
-    declare recentWojak: File;
-
-    constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
-        Object.assign(this, ui);
-        this.accessor = accessor;
-        this.recentWojak = null;
-    }
-
-    protected handleWojakify(wojak: File, id: string) {
-        this.recentWojak = wojak;
-        citeReply(id);
-        if(this.preview.checked)
-            this.accessor.getPostContainer(id).appendChild(createPreviewImage(wojak));
-        if(this.autoReply.checked) {
-            document.getElementsByName('post')[1].click();
-        }
+export class VichanPlatformHandler extends TinyboardPlatformHandler {
+    constructor(ui: UserInterfaceContainer, accessor: TinyboardAccessor) {
+        super(ui, accessor);
     }
 
     protected createImageWojakifyButton(id: string, nth: number) {
@@ -54,8 +21,7 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
         });
     }
 
-    public addWojakifyButtons()
-    {
+    public addWojakifyButtons() {
         document.querySelectorAll('.post > .intro').forEach(intro => {
             if(intro.querySelector('.wojakify') === null) {
                 const id = (intro.getElementsByClassName('post_no')[1] as HTMLAnchorElement).innerText;
@@ -73,8 +39,7 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
         });
     }
 
-    public setupPostingHandler()
-    {
+    public setupPostingHandler() {
         $(document).on('ajax_before_post', (e, formData: FormData) => {
             if(this.recentWojak)
                 formData.set('file', this.recentWojak);
@@ -83,36 +48,9 @@ export class VichanPlatformHandler implements UserInterfaceContainer {
     }
 }
 
-const extractText = (elements: any[]) => {
-    let ret: string[] = [];
-    for(const e of elements) {
-        if(e.classList.contains('empty')) {
-            continue;
-        } else if(e.classList.contains('ltr')) {
-            const containedElement = e.childNodes[0];
-            if(containedElement.tagName === 'A') {
-                if(!(containedElement.innerText || "").startsWith('>>'))
-                    ret.push(e.innerText);
-            } else {
-                ret.push(e.data || e.innerText);
-            }
-        }
-    }
-
-    return ret;
-}
-
-export class VichanAccessor implements ThreadAccessor {
-    public getPostText(id: string): string[] {
-        return extractText([...this.getPostContainer(id).querySelector('.body').childNodes as any]);
-    }
-
-    public getPostContainer(id: string) {
-        return (document.getElementById('reply_' + id) || document.getElementById('op_' + id));
-    }
-
-    public getPostImageURL(id: string, nth: number): string {
-        const imgContainer = (document.getElementById('reply_' + id) || document.getElementById('thread_' + id)).children[1].children[nth];
+export class VichanAccessor extends TinyboardAccessor {
+    public getPostImageURL(id: string, nth: number = 0) {
+        const imgContainer = this.getPostContainer(id).querySelector('.files').children[nth];
         if(imgContainer === undefined || imgContainer.children.length < 2)
             return 'none';
         const childList = imgContainer.children;
@@ -132,6 +70,7 @@ export const createUI = (): UserInterfaceContainer => {
         sojakSelector: wojakSelector,
         seetheMode: seethMode[1],
         autoReply: autoReply[1],
-        preview: preview[1]
+        preview: preview[1],
+        imageMode: undefined
     }
 }
