@@ -1,3 +1,5 @@
+import { data } from "jquery";
+
 const dataUri: (path: string) => string = require('data-uri.macro');
 
 const options = {
@@ -27,6 +29,7 @@ const options = {
     "Lenin": dataUri("../img/lenin.png"),
     "Stalin": dataUri('../img/stalin.png'),
     "Trotsky": dataUri("../img/trotsky.png"),
+    "Deng": dataUri("../img/deng.png"),
     "Putin": dataUri("../img/putin.jpeg"),
     "Jannie": dataUri("../img/jannie.png"),
     "Jannie2": dataUri("../img/jannie2.png"),
