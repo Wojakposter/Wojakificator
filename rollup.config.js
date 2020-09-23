@@ -1,5 +1,7 @@
 import babel from '@rollup/plugin-babel'
 import typescript from '@rollup/plugin-typescript'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import commonJs from '@rollup/plugin-commonjs'
 import jscc from 'rollup-plugin-jscc'
 import userscriptHeader from 'rollup-plugin-userscript-header'
 
@@ -21,6 +23,8 @@ export default {
     plugins: [
         jscc({values: PLATFORM_DESCRIPTOR.conditions}),
         typescript(),
+        commonJs(),
+        nodeResolve(),
         babel({babelHelpers: "bundled", extensions: ['.js', '.ts']}),
         userscriptHeader({
             overwrite: {

@@ -3,6 +3,8 @@ import { generateTextWojak, generateImageWojak } from "./generator";
 import options from './options'
 import { memeficate } from "./textUtil";
 
+import "core-js/features/array/flat-map";
+
 export interface UserInterfaceContainer {
     sojakSelector: HTMLSelectElement;
     seetheMode: HTMLInputElement;

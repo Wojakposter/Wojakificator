@@ -4,6 +4,8 @@ import { generateImageWojak, generateTextWojak } from '../generator'
 import { memeficate } from '../textUtil'
 import { createWojakifyButton, createPreviewImage, createCheckbox, createSelect } from '../ui';
 
+import "core-js/features/array/flat-map";
+
 unsafeWindow.recentSoyjack = null;
 
 const extractText = n => {
