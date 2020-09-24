@@ -76,8 +76,13 @@ const createWojakifyButton_4chan = id => createWojakifyButton('wojakify', 'Wojak
 
 const addWojakifyButtons = () => {
     document.querySelectorAll(".postInfo").forEach(postInfo => {
-        if(postInfo.querySelector(".wojakify") === null)
-            postInfo.insertBefore(createWojakifyButton_4chan(postInfo.querySelector(".postNum").childNodes[1].innerText), postInfo.childNodes[0]);
+        if(postInfo.querySelector(".wojakify") === null) {
+            const id = postInfo.querySelector(".postNum").childNodes[1].innerText;
+            const button = createWojakifyButton_4chan(id);
+            postInfo.insertBefore(button, postInfo.childNodes[0]);
+            const postInfoMobile = document.getElementById('pim' + id);
+            postInfoMobile.insertBefore(button.cloneNode(true), postInfoMobile.childNodes[0]);
+        }
     });
 }
 
