@@ -5,27 +5,28 @@ import { generateTextWojak, generateImageWojak } from './generator'
 import { memeficate } from './textUtil'
 
 export class VichanPlatformHandler extends TinyboardPlatformHandler {
+    declare boundOnTextWojakify: (id: string) => void;
+    declare boundOnImageWojakify: (id: string, nth: number) => void;
+
     constructor(ui: UserInterfaceContainer, accessor: TinyboardAccessor) {
         super(ui, accessor);
+        this.boundOnTextWojakify = this.onTextWojakify.bind(this);
+        this.boundOnImageWojakify = this.onImageWojakify.bind(this);
     }
 
-    protected createImageWojakifyButton(id: string, nth: number) {
-        return createWojakifyButton('wojakify-image', 'Wojakify Image', () => {
-            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
-        });
+    protected onImageWojakify(id: string, nth: number) {
+        generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleGenerateWojak(wojak, id));
     }
 
-    protected createTextWojakifyButton(id: string) {
-        return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
-        });
+    protected onTextWojakify(id: string) {
+        generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleGenerateWojak(wojak, id))
     }
 
     public addWojakifyButtons() {
         document.querySelectorAll('.post > .intro').forEach(intro => {
             if(intro.querySelector('.wojakify') === null) {
                 const id = (intro.getElementsByClassName('post_no')[1] as HTMLAnchorElement).innerText;
-                intro.insertBefore(this.createTextWojakifyButton(id), intro.children[0]);
+                intro.insertBefore(createWojakifyButton('wojakify', 'Wojakify', this.boundOnTextWojakify, id), intro.children[0]);
                 let fileContainer = intro.nextElementSibling;
                 if(fileContainer.className !== 'files')
                     fileContainer = intro.parentElement.previousElementSibling;
@@ -33,7 +34,7 @@ export class VichanPlatformHandler extends TinyboardPlatformHandler {
                     const fileInfo = file.children[0];
                     if(fileInfo === undefined || fileInfo.className !== 'fileinfo')
                         return;
-                    fileInfo.insertBefore(this.createImageWojakifyButton(id, i), fileInfo.childNodes[0]);
+                    fileInfo.insertBefore(createWojakifyButton('wojakify-image', 'Wojakify Image', this.boundOnImageWojakify, id, i), fileInfo.childNodes[0]);
                 });
             }
         });

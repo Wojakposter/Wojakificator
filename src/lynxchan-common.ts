@@ -48,10 +48,14 @@ export class LynxchanPlatformHandler implements UserInterfaceContainer {
     declare sojakSelector: HTMLSelectElement;
     declare autoReply: HTMLInputElement;
     declare accessor: ThreadAccessor;
+    declare boundOnTextWojakify: (id: string) => void;
+    declare boundOnImageWojakify: (id: string, nth: number) => void;
 
     constructor(ui: UserInterfaceContainer, accessor: ThreadAccessor) {
         Object.assign(this, ui);
         this.accessor = accessor;
+        this.boundOnTextWojakify = this.onTextWojakify.bind(this);
+        this.boundOnImageWojakify = this.onImageWojakify.bind(this);
     }
 
     protected handleWojakify(wojak: File, id: string) {
@@ -63,25 +67,21 @@ export class LynxchanPlatformHandler implements UserInterfaceContainer {
         }
     }
 
-    protected createImageWojakifyButton(id: string, nth: number) {
-        return createWojakifyButton('wojakify-image', 'Wojakify Image', () => {
-            generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
-        });
+    protected onImageWojakify(id: string, nth: number) {
+        generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
     }
 
-    protected createTextWojakifyButton(id: string) {
-        return createWojakifyButton('wojakify', 'Wojakify', () => {
-            generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
-        });
+    protected onTextWojakify(id: string) {
+        generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
     }
     
     public addWojakifyButtons() {
         document.querySelectorAll(".postInfo, .opHead").forEach(postInfo => {
             if(postInfo.querySelector(".wojakify") === null && postInfo.closest(".quoteTooltip") === null) {
                 const id = (postInfo.querySelector(".linkQuote") as HTMLAnchorElement).innerText;
-                postInfo.insertBefore(this.createTextWojakifyButton(id), postInfo.childNodes[0]);
+                postInfo.insertBefore(createWojakifyButton('wojakify', 'Wojakify', this.boundOnTextWojakify, id), postInfo.childNodes[0]);
                 (postInfo.classList.contains("opHead") ? postInfo.previousElementSibling : postInfo.nextElementSibling.nextElementSibling).querySelectorAll(".uploadDetails").forEach((uploadInfo, i) => {
-                    uploadInfo.insertBefore(this.createImageWojakifyButton(id, i), uploadInfo.childNodes[0]);
+                    uploadInfo.insertBefore(createWojakifyButton('wojakify-image', 'Wojakify Image', this.boundOnImageWojakify, id, i), uploadInfo.childNodes[0]);
                 });
             }
         });

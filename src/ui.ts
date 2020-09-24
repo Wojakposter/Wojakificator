@@ -1,4 +1,4 @@
-export const createWojakifyButton = (buttonClass: string, name: string, callback: () => void) => {
+export const createWojakifyButton = (buttonClass: string, name: string, callback: (...args: any[]) => void, ...args: any[]) => {
     const button = document.createElement('button');
     button.style.cursor = 'pointer';
     button.style.margin = '5px';
@@ -7,7 +7,7 @@ export const createWojakifyButton = (buttonClass: string, name: string, callback
     //button.href = "#";
     button.onclick = (e) => {
         e.preventDefault();
-        callback();
+        callback(...args);
     };
     return button;
 };

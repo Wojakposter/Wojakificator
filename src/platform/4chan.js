@@ -52,7 +52,7 @@ const checkRecaptchaCompletion = () => {
     }
 }
 
-const createWojakifyButton_4chan = id => createWojakifyButton('wojakify', 'Wojakify', () => {
+const onWojakify = id => {
     const seetheMode = document.getElementById("seetheMode").checked;
     const imageMode = document.getElementById("imageMode").checked;
     const selectedWojakURI = options[document.getElementById('soyjackSelector').value];
@@ -72,13 +72,13 @@ const createWojakifyButton_4chan = id => createWojakifyButton('wojakify', 'Wojak
             }
         }
     }).catch(reason => alert("Something's fucked: " + reason));
-});
+};
 
 const addWojakifyButtons = () => {
     document.querySelectorAll(".postInfo").forEach(postInfo => {
         if(postInfo.querySelector(".wojakify") === null) {
             const id = postInfo.querySelector(".postNum").childNodes[1].innerText;
-            const button = createWojakifyButton_4chan(id);
+            const button = createWojakifyButton('wojakify', 'Wojakify', onWojakify, id);
             postInfo.insertBefore(button, postInfo.childNodes[0]);
             const postInfoMobile = document.getElementById('pim' + id);
             postInfoMobile.insertBefore(button.cloneNode(true), postInfoMobile.childNodes[0]);

@@ -29,13 +29,16 @@ export class TinyboardPlatformHandler implements UserInterfaceContainer {
 
     declare accessor: TinyboardAccessor;
 
+    declare boundOnWojakify: (id: string) => void;
+
     constructor(ui: UserInterfaceContainer, accessor: TinyboardAccessor) {
         Object.assign(this, ui);
         this.accessor = accessor;
         this.recentWojak = null;
+        this.boundOnWojakify = this.onWojakify.bind(this);
     }
 
-    protected handleWojakify(wojak: File, id: string) {
+    protected handleGenerateWojak(wojak: File, id: string) {
         this.recentWojak = wojak;
         citeReply(id);
         if(this.preview.checked)
@@ -45,20 +48,17 @@ export class TinyboardPlatformHandler implements UserInterfaceContainer {
         }
     }
 
-    private createWojakifyButton(id: string) {
-        return createWojakifyButton('wojakify', 'Wojakify', () => {
-            const selectedWojak = options[this.sojakSelector.value];
-            (this.imageMode.checked ? generateImageWojak(this.accessor.getPostImageURL(id), selectedWojak)
-                                    : generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), selectedWojak)).then(wojak => this.handleWojakify(wojak, id))
-                                                                                                                                           .catch(reason => alert("Something's fucked: " + reason));
-        });
+    private onWojakify(id: string) {
+        const selectedWojak = options[this.sojakSelector.value];
+        (this.imageMode.checked ? generateImageWojak(this.accessor.getPostImageURL(id), selectedWojak)
+                                : generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), selectedWojak)).then(wojak => this.handleGenerateWojak(wojak, id))
+                                                                                                                                        .catch(reason => alert("Something's fucked: " + reason));
     }
 
     public addWojakifyButtons() {
         document.querySelector('[id^="thread_"]').querySelectorAll('.intro').forEach(header => {
-            if(header.querySelector(".wojakify") === null) {
-                header.insertBefore(this.createWojakifyButton(header.id), header.childNodes[0])
-            }
+            if(header.querySelector(".wojakify") === null)
+                header.insertBefore(createWojakifyButton('wojakify', 'Wojakify', this.boundOnWojakify, header.id), header.childNodes[0])
         });
     }
 
