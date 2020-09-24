@@ -52,9 +52,9 @@ const checkRecaptchaCompletion = () => {
     }
 }
 
-const createWojakifyHandler = id => () => {
-    const seetheMode = document.getElementById("seetheMode").checked === true;
-    const imageMode = document.getElementById("imageMode").checked === true;
+const createWojakifyButton_4chan = id => createWojakifyButton('wojakify', 'Wojakify', () => {
+    const seetheMode = document.getElementById("seetheMode").checked;
+    const imageMode = document.getElementById("imageMode").checked;
     const selectedWojakURI = options[document.getElementById('soyjackSelector').value];
     (imageMode ? generateImageWojak(getPostImageURL(id), selectedWojakURI) : generateTextWojak(getPostText(id, seetheMode), selectedWojakURI)).then(wojak => {
         unsafeWindow.recentSoyjack = wojak;
@@ -72,16 +72,12 @@ const createWojakifyHandler = id => () => {
             }
         }
     }).catch(reason => alert("Something's fucked: " + reason));
-}
+});
 
 const addWojakifyButtons = () => {
     document.querySelectorAll(".postInfo").forEach(postInfo => {
         if(postInfo.querySelector(".wojakify") === null)
-        {
-            const id = postInfo.querySelector(".postNum").childNodes[1].innerText;
-            const button = createWojakifyButton('wojakify', "Wojakify", createWojakifyHandler(id));
-            postInfo.insertBefore(button, postInfo.childNodes[0]);
-        }
+            postInfo.insertBefore(createWojakifyButton_4chan(postInfo.querySelector(".postNum").childNodes[1].innerText), postInfo.childNodes[0]);
     });
 }
 
