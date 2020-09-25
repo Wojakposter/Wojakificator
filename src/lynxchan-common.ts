@@ -58,7 +58,7 @@ export class LynxchanPlatformHandler implements UserInterfaceContainer {
         this.boundOnImageWojakify = this.onImageWojakify.bind(this);
     }
 
-    protected handleWojakify(wojak: File, id: string) {
+    protected handleGenerateWojak(wojak: File, id: string) {
         postCommon.addSelectedFile(wojak);
         qr.showQr(id);
         if(this.autoReply.checked) {
@@ -68,11 +68,11 @@ export class LynxchanPlatformHandler implements UserInterfaceContainer {
     }
 
     protected onImageWojakify(id: string, nth: number) {
-        generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+        generateImageWojak(this.accessor.getPostImageURL(id, nth), options[this.sojakSelector.value]).then(wojak => this.handleGenerateWojak(wojak, id));
     }
 
     protected onTextWojakify(id: string) {
-        generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleWojakify(wojak, id));
+        generateTextWojak(memeficate(this.accessor.getPostText(id), this.seetheMode.checked), options[this.sojakSelector.value]).then(wojak => this.handleGenerateWojak(wojak, id));
     }
     
     public addWojakifyButtons() {
