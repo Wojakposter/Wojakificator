@@ -2,7 +2,7 @@ import options from '../options'
 import * as constants from '../constants'
 import { generateImageWojak, generateTextWojak } from '../generator'
 import { memeficate } from '../textUtil'
-import { createWojakifyButton, createPreviewImage, createCheckbox, createSelect } from '../ui';
+import { createWojakifyButton, createCheckbox, createSelect, PreviewManager } from '../ui';
 
 import "core-js/features/array/flat-map";
 
@@ -59,7 +59,7 @@ const onWojakify = id => {
     (imageMode ? generateImageWojak(getPostImageURL(id), selectedWojakURI) : generateTextWojak(getPostText(id, seetheMode), selectedWojakURI)).then(wojak => {
         unsafeWindow.recentSoyjack = wojak;
         if(document.getElementById("previewWojak").checked)
-            document.getElementById("p" + id).appendChild(createPreviewImage(wojak));
+            previewManager.addWojak(wojak);
         if(document.getElementById("autoReply").checked) {
             //If quick reply window is closed, open it.
             if(QR.currentTid == null)
@@ -83,13 +83,14 @@ const addWojakifyButtons = () => {
         }
     });
 }
-
+const previewManager = new PreviewManager();
 let wojakSelector = createSelect("soyjackSelector", options);
 let container = Main.hasMobileLayout ? document.querySelectorAll('.navLinks.mobile')[1] : document.querySelector('.bottomCtrl') ;
 [wojakSelector, ...createCheckbox("seetheMode", "Seethe Mode"),
                 ...createCheckbox("imageMode", "Image Mode"),
-                ...createCheckbox("previewWojak", "Preview", true),
+                ...createCheckbox("previewWojak", "Preview", true, previewManager.handlePreviewCheckbox.bind(previewManager)),
                 ...createCheckbox("autoReply", "Auto Reply", true)].forEach(e => container.appendChild(e));
+previewManager.handlePreviewCheckbox(document.getElementById('previewWojak').checked);
 
 addWojakifyButtons();
 setInterval(addWojakifyButtons, 5000);
@@ -175,6 +176,7 @@ unsafeWindow.QR.submit = function(e) {
             t.set("upfile", unsafeWindow.recentSoyjack);
             unsafeWindow.recentSoyjack = null;
         }
+        previewManager.removeWojak();
         //MODIFIED END
         if(!(!t.entries || !t["delete"] || t.get("upfile") && t.get("upfile").size)) {
             t["delete"]("upfile");

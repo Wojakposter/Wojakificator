@@ -12,7 +12,7 @@ export const createWojakifyButton = (buttonClass: string, name: string, callback
     return button;
 };
 
-export const createCheckbox = (id: string, name: string, initialState = false): [HTMLLabelElement, HTMLInputElement] => {
+export const createCheckbox = (id: string, name: string, initialState = false, callback?: (state: boolean) => void): [HTMLLabelElement, HTMLInputElement] => {
     const isCheckedCookie = localStorage.getItem(id + "Enabled");
     if(isCheckedCookie !== null)
         initialState = isCheckedCookie === "true";
@@ -25,6 +25,7 @@ export const createCheckbox = (id: string, name: string, initialState = false): 
     checkbox.checked = initialState;
     checkbox.onclick = function(this: HTMLInputElement) {
         localStorage.setItem(this.id + "Enabled", this.checked.toString());
+        callback && callback(this.checked);
     };
     
     label.htmlFor = id;
@@ -71,5 +72,68 @@ export const createPreviewImage = (file: File) => {
         this.remove();
     }
     return image;
+}
+
+export class PreviewManager {
+    declare currentWojak: File;
+    declare previewImg: HTMLImageElement;
+    declare isPreviewVisible: boolean;
+
+    constructor() {
+        this.currentWojak = null;
+        this.previewImg = null;
+    }
+
+    public addWojak(wojak: File) {
+        this.currentWojak = wojak;
+        this.updatePreview();
+    }
+
+    public getWojak() {
+        return this.currentWojak;
+    }
+
+    public removeWojak() {
+        this.currentWojak = null;
+        this.updatePreview();
+    }
+
+    public handlePreviewCheckbox(checked: boolean) {
+        checked ? this.showPreview() : this.hidePreview();
+    }
+
+    public hidePreview() {
+        if(this.previewImg !== null)
+            this.previewImg.style.display = 'none';
+        this.isPreviewVisible = false;
+    }
+
+    public showPreview() {
+        if(this.previewImg !== null)
+            this.previewImg.style.display = 'block';
+        this.isPreviewVisible = true;
+    }
+
+    protected updatePreview() {
+        if(this.currentWojak === null) {
+            if(this.previewImg !== null) {
+                this.previewImg.remove();
+                this.previewImg = null;
+            }
+        } else {
+            if(this.previewImg === null) {
+                this.previewImg = new Image();
+                this.previewImg.src = URL.createObjectURL(this.currentWojak);
+                this.previewImg.style.bottom = '0';
+                this.previewImg.style.height = '30%';
+                this.previewImg.style.position = 'fixed';
+                this.previewImg.style.display = this.isPreviewVisible ? 'block' : 'none';
+                document.body.appendChild(this.previewImg);
+            } else {
+                URL.revokeObjectURL(this.previewImg.src);
+                this.previewImg.src = URL.createObjectURL(this.currentWojak);
+            }
+        }
+    }
 }
 //#endif
