@@ -1,5 +1,3 @@
-import { data } from "jquery";
-
 const dataUri: (path: string) => string = require('data-uri.macro');
 
 const options = {
